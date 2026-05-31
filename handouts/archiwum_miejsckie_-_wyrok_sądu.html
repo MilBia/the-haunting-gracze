@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pomoc dla Graczy #2: Rejestr Sądowy, 1852</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Marck+Script&display=swap');
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #121824;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 40px 20px;
+            font-family: 'Georgia', serif;
+        }
+
+        /* Przycisk Drukuj */
+        .print-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 14px;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .print-btn:hover {
+            background-color: #1a252f;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+        }
+
+        /* Dokument sądowy */
+        .court-document {
+            background-color: #faf5e6;
+            color: #444; /* Zszarzały inkaust */
+            width: 100%;
+            max-width: 700px;
+            padding: 50px 45px;
+            box-shadow: 
+                0 15px 35px rgba(0,0,0,0.6),
+                inset 0 0 60px rgba(139, 101, 8, 0.12);
+            border: 1px solid #e5dbbe;
+            position: relative;
+            font-size: 1rem;
+            line-height: 1.6;
+            text-align: justify;
+        }
+
+        /* Ozdobna linia boczna */
+        .court-document::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 25px;
+            bottom: 0;
+            width: 1px;
+            border-left: 1px solid rgba(139, 101, 8, 0.15);
+        }
+
+        /* Nagłówek */
+        .header {
+            text-align: center;
+            margin-bottom: 35px;
+            border-bottom: 1px double #8b6508;
+            padding-bottom: 15px;
+        }
+
+        .court-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            color: #222;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .court-subtitle {
+            font-family: 'Playfair Display', serif;
+            font-size: 0.95rem;
+            font-style: italic;
+            color: #555;
+            letter-spacing: 1px;
+        }
+
+        /* Treść */
+        .content {
+            margin-bottom: 40px;
+            text-indent: 30px;
+        }
+
+        .content p {
+            margin-bottom: 15px;
+        }
+
+        /* Stopka i podpis */
+        .footer-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-top: 50px;
+            padding-top: 20px;
+        }
+
+        /* Pieczęć */
+        .seal-container {
+            width: 120px;
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            opacity: 0.75;
+        }
+
+        .seal-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 7px;
+            fill: #8b2635; /* Ciemnoczerwony/bordowy stempelek */
+            font-weight: bold;
+        }
+
+        /* Podpis */
+        .signature-container {
+            text-align: right;
+            padding-right: 10px;
+        }
+
+        .signature-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #777;
+            margin-bottom: 10px;
+        }
+
+        .signature-img {
+            font-family: 'Marck Script', cursive;
+            font-size: 1.8rem;
+            color: #1c2d5a; /* Ciemnoniebieski tusz długopisu/pióra */
+            transform: rotate(-3deg);
+            margin-right: 15px;
+            user-select: none;
+            display: inline-block;
+        }
+
+        .clerk-title {
+            font-size: 0.85rem;
+            font-style: italic;
+            color: #555;
+        }
+
+        /* Stylizacja pod wydruk */
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+                justify-content: flex-start;
+            }
+            .print-btn {
+                display: none !important;
+            }
+            .court-document {
+                box-shadow: none;
+                border: none;
+                max-width: 100%;
+                background: white;
+            }
+            .court-document::before {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <button class="print-btn" onclick="window.print()">
+        <span>🖨️ Drukuj pomoc</span>
+    </button>
+
+    <div class="court-document">
+        <div class="header">
+            <h1 class="court-title">Rejestr Sądowy Hrabstwa Suffolk</h1>
+            <p class="court-subtitle">Rok Pański 1852, Wydział Spraw Cywilnych</p>
+        </div>
+        
+        <div class="content">
+            <p>Niniejszym poświadcza się, co następuje: Walter Corbitt został w trybie pilnym pozwany na mocy zbiorowej petycji wniesionej przez jego sąsiadów, którzy oskarżyli go pod przysięgą o haniebne zachowania, stojące w rażącej sprzeczności z obyczajami chrześcijańskiego społeczeństwa. W obliczu zeznań tak licznych i wstrząsających sąd, bacząc bacznym okiem na dobrostan społeczności, zmuszony został do interwencji.</p>
+            
+            <p>Po długim i nad wyraz burzliwym wysłuchaniu obu stron, Wydział Spraw Cywilnych nakazał pozwanemu Walterowi Corbittowi opuszczenie swej posiadłości w nieprzekraczalnym terminie i przeniesienie zamieszkania w rejony mniej zaludnione. Sąd wyraził stanowcze życzenie, by Corbitt pożegnał swą kamienicę i zaprzestał jakichkolwiek uciążliwych i zgubnych działań na szkodę mieszkańców okolicy. W aktach zaznaczono również nakaz całkowitego oddzielenia osądzonego od jakichkolwiek funkcji społecznych w obrębie dawnego sąsiedztwa.</p>
+        </div>
+
+        <div class="footer-section">
+            <div class="seal-container">
+                <!-- SVG okrągłej pieczęci sądu -->
+                <svg width="120" height="120" viewBox="0 0 120 120">
+                    <circle cx="60" cy="60" r="54" fill="none" stroke="#8b2635" stroke-width="2" stroke-dasharray="2 2" />
+                    <circle cx="60" cy="60" r="48" fill="none" stroke="#8b2635" stroke-width="1.5" />
+                    <path id="curve" d="M 18,60 A 42,42 0 1,1 102,60 A 42,42 0 1,1 18,60" fill="none" />
+                    <text class="seal-text">
+                        <textPath href="#curve" startOffset="50%" text-anchor="middle">
+                            • COURT OF SUFFOLK COUNTY • MASSACHUSETTS
+                        </textPath>
+                    </text>
+                    <!-- Środek pieczęci -->
+                    <g transform="translate(42, 42)">
+                        <path d="M18 6v12M6 18h24M12 10l6-4 6 4M10 18V10M26 18V10" stroke="#8b2635" stroke-width="1.5" fill="none"/>
+                        <text x="18" y="27" font-family="'Playfair Display', serif" font-size="7" fill="#8b2635" text-anchor="middle" font-weight="bold">1852</text>
+                    </g>
+                </svg>
+            </div>
+            
+            <div class="signature-container">
+                <div class="signature-label">Poświadczył za zgodność:</div>
+                <div class="signature-img">J. R. Bellingham</div>
+                <div class="clerk-title">Pisarz Sądu Hrabstwa Suffolk</div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

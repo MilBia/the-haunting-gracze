@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pomoc dla Graczy #3: Nekrolog Waltera Corbitta, 1866</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #121824;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 40px 20px;
+            font-family: 'Georgia', serif;
+        }
+
+        /* Przycisk Drukuj */
+        .print-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 14px;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .print-btn:hover {
+            background-color: #1a252f;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+        }
+
+        /* Nekrolog */
+        .obituary-clipping {
+            background-color: #eee6d0; /* Lekko zszarzała i pożółkła */
+            color: #111;
+            width: 100%;
+            max-width: 380px;
+            padding: 25px 20px;
+            box-shadow: 
+                0 15px 30px rgba(0,0,0,0.5),
+                inset 0 0 30px rgba(0, 0, 0, 0.08);
+            border: 1px solid #d3caaf;
+            position: relative;
+            transform: rotate(0.8deg);
+            /* Cięcie nożyczkami - czystszy prostokąt, ale wciąż naturalny papier */
+            clip-path: polygon(
+                0% 1%, 100% 0%, 99% 100%, 1% 99%
+            );
+        }
+
+        /* Żałobna czarna ramka */
+        .mourning-border {
+            border: 4px double #000;
+            padding: 20px 15px;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #000;
+            padding-bottom: 8px;
+        }
+
+        .journal-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .obituary-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.15rem;
+            font-weight: 900;
+            text-align: center;
+            letter-spacing: 1px;
+            margin-top: 10px;
+            text-transform: uppercase;
+            color: #000;
+        }
+
+        .obituary-body {
+            font-family: 'Playfair Display', serif;
+            font-size: 0.88rem;
+            line-height: 1.5;
+            text-align: justify;
+            color: #111;
+        }
+
+        .obituary-body p {
+            margin-bottom: 8px;
+            text-indent: 12px;
+        }
+
+        .obituary-body p:first-of-type {
+            text-indent: 0;
+        }
+
+        /* Stylizacja pod wydruk */
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+                justify-content: flex-start;
+            }
+            .print-btn {
+                display: none !important;
+            }
+            .obituary-clipping {
+                box-shadow: none;
+                border: none;
+                transform: none;
+                max-width: 100%;
+                clip-path: none;
+                background: white;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <button class="print-btn" onclick="window.print()">
+        <span>🖨️ Drukuj pomoc</span>
+    </button>
+
+    <div class="obituary-clipping">
+        <div class="mourning-border" style="border: 1px solid #000; padding: 20px 15px;">
+            <div class="section-header" style="text-align: center; margin-bottom: 15px; border-bottom: 1px solid #000; padding-bottom: 8px;">
+                <div class="journal-title" style="font-family: 'Playfair Display', serif; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; font-weight: bold; color: #333;">
+                    Wiadomości Handlowe i Towarzyskie – Boston, 1835
+                </div>
+            </div>
+            
+            <div class="obituary-body">
+                <h3 class="obituary-title" style="font-family: 'Playfair Display', serif; font-size: 1.15rem; font-weight: 900; text-align: center; letter-spacing: 1px; margin-top: 10px; text-transform: uppercase; color: #000;">
+                    Nowe domostwo pana Corbitta
+                </h3>
+                <p>Z nieskrywaną satysfakcją donosimy o pomyślnym sfinalizowaniu transakcji zakupu nowej rezydencji w centralnej części naszego radosnego miasta[cite: 519, 1098]. Posiadłość, wzniesiona niedawno przez jednego z naszych wielce szanowanych i majętnych kupców bostońskich, przeszła oficjalnie w ręce pana Waltera Corbitta, esquire.</p>
+                <p>Pierwotny fundator i budowniczy owego pięknego, ceglanego domu, zmuszony został do tak nagłej sprzedaży z przyczyn nader niefortunnych[cite: 725]. Jak niesie wieść niesiona po bostońskich salonach, ów dżentelmen niemal natychmiast po ukończeniu prac budowlanych zapadł na zdrowiu na skutek niespodziewanej i gwałtownej niemocy. Pokładamy głęboką nadzieję, że zmiana otoczenia przyniesie nieszczęsnemu zbywcy rychłe uzdrowienie, zaś panu Corbittowi nowe lokum służyć będzie w zdrowiu i pomyślności przez długie lata.</p>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

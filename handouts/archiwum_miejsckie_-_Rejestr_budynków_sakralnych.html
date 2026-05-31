@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pomoc dla Graczy #7: Akta Miejskie – Kaplica Kontemplacji</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Special+Elite&family=Playfair+Display:wght@700;900&display=swap');
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #121824;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 40px 20px;
+            font-family: 'Special Elite', monospace;
+        }
+
+        /* Przycisk Drukuj */
+        .print-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 14px;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .print-btn:hover {
+            background-color: #1a252f;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+        }
+
+        /* Akta Miejskie */
+        .municipal-file {
+            background-color: #e5ded0; /* Szaro-beżowy papier */
+            color: #333;
+            width: 100%;
+            max-width: 680px;
+            padding: 60px 50px;
+            box-shadow: 
+                0 15px 35px rgba(0,0,0,0.6),
+                inset 0 0 60px rgba(100, 80, 50, 0.15);
+            border: 1px solid #c9c0ae;
+            position: relative;
+            transform: rotate(0.6deg);
+            
+            /* Krawędzie */
+            clip-path: polygon(
+                0% 0%, 100% 1%, 99% 14%, 100% 28%, 98% 43%, 99% 58%, 98% 73%, 100% 88%, 99% 100%, 0% 99%,
+                1% 89%, 0% 74%, 2% 59%, 1% 44%, 0% 29%, 1% 14%
+            );
+        }
+
+        /* Otwory po dziurkaczu z rdzą */
+        .binder-holes {
+            position: absolute;
+            left: 20px;
+            top: 0;
+            bottom: 0;
+            width: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            align-items: center;
+            padding: 80px 0;
+            pointer-events: none;
+        }
+
+        .hole {
+            width: 15px;
+            height: 15px;
+            background-color: #121824; /* Prześwit tła */
+            border-radius: 50%;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.8);
+            position: relative;
+        }
+
+        .hole::after {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
+            background: radial-gradient(circle, rgba(139, 69, 19, 0.4) 0%, rgba(139, 69, 19, 0) 70%);
+            border-radius: 50%;
+        }
+
+        /* Stempel "ZASTRZEŻONE" */
+        .stamp-classified {
+            position: absolute;
+            top: 40px;
+            right: 40px;
+            border: 3px double #b22222;
+            color: #b22222;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
+            font-weight: 900;
+            padding: 6px 15px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            transform: rotate(8deg);
+            opacity: 0.75;
+            user-select: none;
+            pointer-events: none;
+        }
+
+        /* Nagłówek dokumentu */
+        .header {
+            border-bottom: 2px solid #555;
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+        }
+
+        .agency-title {
+            font-size: 1rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+            color: #222;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .agency-sub {
+            font-size: 0.8rem;
+            color: #444;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        /* Treść raportu */
+        .report-body {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            text-align: justify;
+        }
+
+        .report-body p {
+            margin-bottom: 20px;
+            text-indent: 30px;
+        }
+
+        .stamp-footer {
+            margin-top: 40px;
+            display: inline-block;
+            border: 2px solid #b22222;
+            color: #b22222;
+            font-family: 'Playfair Display', serif;
+            font-size: 0.8rem;
+            font-weight: bold;
+            padding: 4px 8px;
+            transform: rotate(-3deg);
+            opacity: 0.7;
+        }
+
+        /* Stylizacja pod wydruk */
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+                justify-content: flex-start;
+            }
+            .print-btn {
+                display: none !important;
+            }
+            .municipal-file {
+                box-shadow: none;
+                border: none;
+                transform: none;
+                max-width: 100%;
+                clip-path: none;
+                background: white;
+            }
+            .hole {
+                background-color: white;
+                border: 1px solid #ccc;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <button class="print-btn" onclick="window.print()">
+        <span>🖨️ Drukuj pomoc</span>
+    </button>
+
+    <div class="municipal-file">
+        <div class="binder-holes">
+            <div class="hole"></div>
+            <div class="hole"></div>
+        </div>
+
+        <div class="stamp-classified">Zastrzeżone</div>
+        
+        <div class="header">
+            <div class="agency-title">Akta Wydziału Urzędu Miasta Boston</div>
+            <div class="agency-sub">Rejestry Zgromadzeń i Wyznań Zorganizowanych</div>
+        </div>
+        
+        <div class="report-body">
+            <p>Rejestr budynków sakralnych nadmienia istnienie związku zwanego "Kaplicą Kontemplacji (i Naszego Pana Otwierającego Tajemnice – Our Lord Granter of Secrets)". Kościół ów, wzniesiony ze składek parafian niezależnych, operował w sekrecie i jawności na przemian. Wynikłe wezwania do rady naczelnej potwierdziły pogłoski, iż sekta wymuszała od wiernych znaczne datki finansowe oraz kosztowności.</p>
+            
+            <p>Kaplica owa oficjalnie zniknęła z otwartej ewidencji po zdecydowanej akcji policji miejskiej w roku 1912, wymierzonym przeciwko łamaniu nakazów lokalnego porządku społecznego. Ponoć w obrębie placówki doszło do zaginięcia kilkorga małoletnich sierot mieszkających na obrzeżach dystryktu portowego.</p>
+            
+            <p>Po przymusowym rozwiązaniu zgromadzenia jego budynek zapieczętowano i planowano rozbiórkę na rzecz przyszłych dróg. Akta procesowe kończą się na skazaniu kilku czołowych członków sekty. Wspomina się również w zapisku bostońskiej rady budowlanej postać niejakiego Wielebnego Michaela Thomasa, pełniącego przed nalotem funkcję Naczelnego Kapłana.</p>
+        </div>
+
+        <div class="stamp-footer">
+            ARCHIWUM MIEJSKIE - ZAMKNIĘTE 1912
+        </div>
+    </div>
+
+</body>
+</html>

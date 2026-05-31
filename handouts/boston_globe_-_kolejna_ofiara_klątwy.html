@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pomoc dla Graczy #5: Boston Globe, 1918</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #121824;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 40px 20px;
+            font-family: 'Georgia', serif;
+        }
+
+        /* Przycisk Drukuj */
+        .print-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 14px;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .print-btn:hover {
+            background-color: #1a252f;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+        }
+
+        /* Wycinek */
+        .newspaper-clipping {
+            background-color: #f7eed7; /* Mniej pożółkły, bo z 1918 roku */
+            color: #222;
+            width: 100%;
+            max-width: 630px;
+            padding: 35px 30px;
+            box-shadow: 
+                0 15px 35px rgba(0,0,0,0.5),
+                inset 0 0 40px rgba(139, 101, 8, 0.15);
+            border: 1px solid #e7dcbe;
+            position: relative;
+            transform: rotate(0.4deg);
+            
+            /* Krawędzie wycinka */
+            clip-path: polygon(
+                0% 1%, 5% 0%, 12% 2%, 20% 0%, 28% 1%, 38% 0%, 45% 2%, 52% 0%, 63% 1%, 74% 0%, 82% 2%, 91% 0%, 96% 1%, 100% 0%,
+                99% 12%, 100% 27%, 99% 45%, 100% 60%, 98% 78%, 99% 92%, 98% 99%,
+                96% 98%, 88% 100%, 81% 97%, 72% 99%, 65% 98%, 55% 99%, 48% 97%, 39% 99%, 30% 98%, 22% 99%, 15% 97%, 5% 99%, 0% 98%,
+                1% 88%, 0% 72%, 1% 55%, 0% 39%, 2% 22%, 1% 10%
+            );
+        }
+
+        /* Nagłówek */
+        .header {
+            text-align: center;
+            border-bottom: 2px solid #222;
+            padding-bottom: 8px;
+            margin-bottom: 18px;
+        }
+
+        .journal-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            font-weight: 900;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: #111;
+            margin-bottom: 4px;
+        }
+
+        .journal-meta {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 0.85rem;
+            color: #444;
+            display: flex;
+            justify-content: space-between;
+            border-top: 1px solid #444;
+            padding-top: 3px;
+        }
+
+        /* Treść artykułu */
+        .article {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .article-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            font-weight: 900;
+            text-align: center;
+            line-height: 1.25;
+            margin-bottom: 15px;
+            color: #111;
+            text-transform: uppercase;
+            letter-spacing: 0.2px;
+        }
+
+        .article-body {
+            column-count: 2;
+            column-gap: 20px;
+            column-rule: 1px solid rgba(34,34,34,0.12);
+            text-align: justify;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            color: #222;
+        }
+
+        .article-body p {
+            margin-bottom: 8px;
+            text-indent: 12px;
+        }
+
+        .article-body p:first-of-type {
+            text-indent: 0;
+        }
+
+        .article-body p:first-of-type::first-letter {
+            font-size: 2.1rem;
+            float: left;
+            font-weight: bold;
+            line-height: 0.9;
+            margin-right: 5px;
+            margin-top: 2px;
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Stylizacja pod wydruk */
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+                justify-content: flex-start;
+            }
+            .print-btn {
+                display: none !important;
+            }
+            .newspaper-clipping {
+                box-shadow: none;
+                border: none;
+                transform: none;
+                max-width: 100%;
+                clip-path: none;
+                background: white;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <button class="print-btn" onclick="window.print()">
+        <span>🖨️ Drukuj pomoc</span>
+    </button>
+
+    <div class="newspaper-clipping">
+        <div class="header">
+            <div class="journal-title">The Boston Globe</div>
+            <div class="journal-meta">
+                <span>Wydanie Poranne</span>
+                <span>Boston, Wtorek, 20 sierpnia 1918 r.</span>
+                <span>Cena: 2 Centy</span>
+            </div>
+        </div>
+        
+        <div class="article">
+            <h2 class="article-title">Kolejna ofiara klątwy "starego domu"?</h2>
+            <div class="article-body">
+                <p>Uważa się, że ponura rezydencja o mrocznej ubiegłowiecznej reputacji w końcu zebrała swoje kolejne żniwo. W dniu wczorajszym, szanowana w okolicy rodzina Macario stała się kolejną ofiarą nieszczęścia. Pan Julio Macario, dotychczas stateczny mąż i ojciec, padł ofiarą dziwacznej histerii, wykrzykując niestworzone herezje i opowieści o złowróżbnych bytach.</p>
+                <p>Ujęty pod przymusem przez patrol policyjny, błąkał się uprzednio po mieście bełkocząc wezwania do dawno powalonych bogów. Szlachetny ten rzemieślnik został w asyście służb ratunkowych przewieziony do Sanatorium w Roxbury z powodu gwałtownego nasilenia stanów lękowych i paranoi.</p>
+                <p>Niestety, w cieniu tej narastającej burzy zmysłów Pana Macario stracił zdrowie ktoś więcej. Ukochaną żonę pędzącą na pomoc sparaliżował tak przerażający lęk przed powrotem w puste mury domu, iż musiano oddać ją pod stałą opiekę lekarzy w szpitalu miejskim. Dzieci państwa Macario zostały zaś – dzięki boskiej opatrzności i błyskawicznej pomocy sąsiadów – przetransportowane do krewnej zamieszkującej na wsi niedaleko Baltimore. Sam dom pozostaje pusty jak grobowiec, a miejscowi zanoszą modły, by nikt więcej nie pokusił się o otwarcie jego drzwi.</p>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

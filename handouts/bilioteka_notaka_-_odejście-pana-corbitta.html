@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pomoc dla Graczy #3: Nekrolog Waltera Corbitta, 1866</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #121824;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 40px 20px;
+            font-family: 'Georgia', serif;
+        }
+
+        /* Przycisk Drukuj */
+        .print-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 14px;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .print-btn:hover {
+            background-color: #1a252f;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+        }
+
+        /* Nekrolog */
+        .obituary-clipping {
+            background-color: #eee6d0; /* Lekko zszarzała i pożółkła */
+            color: #111;
+            width: 100%;
+            max-width: 380px;
+            padding: 25px 20px;
+            box-shadow: 
+                0 15px 30px rgba(0,0,0,0.5),
+                inset 0 0 30px rgba(0, 0, 0, 0.08);
+            border: 1px solid #d3caaf;
+            position: relative;
+            transform: rotate(0.8deg);
+            /* Cięcie nożyczkami - czystszy prostokąt, ale wciąż naturalny papier */
+            clip-path: polygon(
+                0% 1%, 100% 0%, 99% 100%, 1% 99%
+            );
+        }
+
+        /* Żałobna czarna ramka */
+        .mourning-border {
+            border: 4px double #000;
+            padding: 20px 15px;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #000;
+            padding-bottom: 8px;
+        }
+
+        .journal-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .obituary-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.15rem;
+            font-weight: 900;
+            text-align: center;
+            letter-spacing: 1px;
+            margin-top: 10px;
+            text-transform: uppercase;
+            color: #000;
+        }
+
+        .obituary-body {
+            font-family: 'Playfair Display', serif;
+            font-size: 0.88rem;
+            line-height: 1.5;
+            text-align: justify;
+            color: #111;
+        }
+
+        .obituary-body p {
+            margin-bottom: 8px;
+            text-indent: 12px;
+        }
+
+        .obituary-body p:first-of-type {
+            text-indent: 0;
+        }
+
+        /* Stylizacja pod wydruk */
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+                justify-content: flex-start;
+            }
+            .print-btn {
+                display: none !important;
+            }
+            .obituary-clipping {
+                box-shadow: none;
+                border: none;
+                transform: none;
+                max-width: 100%;
+                clip-path: none;
+                background: white;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <button class="print-btn" onclick="window.print()">
+        <span>🖨️ Drukuj pomoc</span>
+    </button>
+
+    <div class="obituary-clipping">
+        <div class="mourning-border">
+            <div class="section-header">
+                <div class="journal-title">Kronika Żałobna – Boston, 1866</div>
+            </div>
+            
+            <div class="obituary-body">
+                <h3 class="obituary-title">Odejście Pana Corbitta</h3>
+                <p>Z głębokim smutkiem zawiadamiamy o odejściu Waltera Corbitta, szanowanego bostońskiego kupca, wieloletniego obywatela naszego miasta oraz człowieka o nader skrytym i powściągliwym usposobieniu. Odszedł on ze świata żywych w zeszłą niedzielę w swym domostwie, pozostawiając po sobie nie tylko pogrążonych w żalu znajomych, ale i znaczny majątek ziemski.</p>
+                <p>W swoim, trzeba rzec, wielce stanowczym i skrupulatnie spisanym testamencie, pan Corbitt pozostawił jasne dyrektywy dotyczące zarządzania jego licznymi dobrami oraz fundacjami charytatywnymi. Uroczystości żałobne, mające na celu odprowadzenie zmarłego na miejsce wiecznego spoczynku, odbędą się w gronie najbliższej rodziny i wykonawców woli testamentowej. Pokój jego duszy i niechaj ziemia bostońska lekką mu będzie.</p>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
