@@ -402,6 +402,86 @@
       letter-spacing: 0.04em;
     }
 
+    /* ── DZIENNIKI SESJI ── */
+    .sessions-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .session-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      transition: border-color 0.25s, box-shadow 0.25s, transform 0.25s;
+      position: relative;
+    }
+
+    .session-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--green-mid), var(--gold-dark), var(--green-mid));
+      opacity: 0.6;
+    }
+
+    .session-card:hover {
+      border-color: var(--gold-dark);
+      box-shadow: 0 6px 28px rgba(100, 70, 20, 0.2);
+      transform: translateY(-3px);
+    }
+
+    .session-card-body {
+      padding: 22px 20px 18px;
+    }
+
+    .session-number {
+      font-family: 'Special Elite', cursive;
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--green-slime);
+      margin-bottom: 6px;
+    }
+
+    .session-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem;
+      color: var(--gold);
+      margin-bottom: 8px;
+      line-height: 1.35;
+    }
+
+    .session-date {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-style: italic;
+      margin-bottom: 16px;
+    }
+
+    .session-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+      padding: 8px 16px;
+      border-radius: 5px;
+      font-size: 0.8rem;
+      border: 1px solid var(--gold-dark);
+      color: var(--gold);
+      background: rgba(139, 111, 71, 0.1);
+      transition: all 0.2s;
+      font-family: 'Special Elite', cursive;
+    }
+
+    .session-link:hover {
+      background: rgba(139, 111, 71, 0.25);
+      border-color: var(--gold);
+      color: #e8d5aa;
+    }
+
     /* ── FOOTER ── */
     footer {
       position: relative;
@@ -585,6 +665,7 @@
     <a href="#badacze">Badacze Tajemnic</a>
     <a href="#przekazane">Odkryte Materiały</a>
     <a href="#mapy">Mapy</a>
+    <a href="#dzienniki">Dzienniki Sesji</a>
   </nav>
 
   <main>
@@ -719,6 +800,27 @@
             <img src="assets/Plan_budynku.jpeg" alt="Plan budynku">
           </a>
           <div class="map-label">Plan Domu Corbitta</div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- DZIENNIKI SESJI -->
+    <section id="dzienniki">
+      <h2><span class="sec-icon">📖</span>Dzienniki Sesji</h2>
+      <p
+        style="color:var(--text-muted); margin-bottom: 24px; font-size: 0.88rem; font-family:'Special Elite',cursive; letter-spacing:0.06em;">
+        Kronika wydarzeń — co badacze odkryli, co przeżyli i co zapewne woleli zapomnieć.
+      </p>
+      <div class="sessions-grid">
+
+        <div class="session-card">
+          <div class="session-card-body">
+            <div class="session-number">Sesja I</div>
+            <div class="session-title">Dom przy Bayard Street</div>
+            <div class="session-date">Boston, 29 maja 2026</div>
+            <a class="session-link" href="sesje/Podsumowanie_Sesji_1.html">📜 Czytaj dziennik</a>
+          </div>
         </div>
 
       </div>
