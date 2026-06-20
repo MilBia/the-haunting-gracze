@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pomoc dla Graczy #9: Dziennik Wielebnego Michaela Thomasa</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@700&display=swap');
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #121824;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 40px 20px;
+            font-family: 'Georgia', serif;
+        }
+
+        /* Przycisk Drukuj */
+        .print-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 14px;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .print-btn:hover {
+            background-color: #1a252f;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+        }
+
+        /* Kartka z dziennika */
+        .journal-page {
+            background-color: #bfae93; /* Ciemniejsza, brudna żółć/beż */
+            color: #111113; /* Smolisty atrament */
+            width: 100%;
+            max-width: 600px;
+            padding: 50px 45px;
+            box-shadow: 
+                0 15px 35px rgba(0,0,0,0.7),
+                inset 0 0 60px rgba(70, 45, 15, 0.4);
+            border: 1px solid #a39379;
+            position: relative;
+            transform: rotate(0.5deg);
+            
+            /* Krawędzie kartki */
+            clip-path: polygon(
+                0% 2%, 4% 0%, 10% 3%, 16% 0%, 25% 2%, 35% 0%, 46% 3%, 55% 1%, 66% 3%, 78% 0%, 88% 2%, 96% 0%, 100% 3%,
+                98% 14%, 100% 30%, 99% 49%, 100% 68%, 98% 85%, 99% 97%,
+                96% 98%, 88% 100%, 79% 97%, 68% 99%, 56% 97%, 45% 99%, 33% 97%, 21% 99%, 10% 97%, 0% 99%,
+                1% 87%, 0% 70%, 2% 52%, 1% 35%, 0% 19%, 1% 8%
+            );
+        }
+
+        /* Plamy krwi w kształcie palców z boku */
+        .blood-fingerprint-1 {
+            position: absolute;
+            left: 5px;
+            top: 150px;
+            width: 25px;
+            height: 45px;
+            background: radial-gradient(ellipse at center, rgba(120, 10, 10, 0.6) 0%, rgba(120, 10, 10, 0.3) 50%, rgba(0,0,0,0) 80%);
+            transform: rotate(-15deg);
+            pointer-events: none;
+            filter: blur(1px);
+        }
+
+        .blood-fingerprint-2 {
+            position: absolute;
+            left: 8px;
+            top: 200px;
+            width: 22px;
+            height: 48px;
+            background: radial-gradient(ellipse at center, rgba(110, 8, 8, 0.65) 0%, rgba(110, 8, 8, 0.3) 55%, rgba(0,0,0,0) 80%);
+            transform: rotate(-10deg);
+            pointer-events: none;
+            filter: blur(1px);
+        }
+
+        .blood-splatter {
+            position: absolute;
+            right: 80px;
+            top: 100px;
+            width: 40px;
+            height: 40px;
+            background: radial-gradient(circle, rgba(110, 8, 8, 0.5) 0%, rgba(110, 8, 8, 0.1) 60%, rgba(0,0,0,0) 100%);
+            pointer-events: none;
+            filter: blur(2px);
+        }
+
+        /* Plama spalonego wosku i czegoś gęstszego na dole */
+        .wax-stain {
+            position: absolute;
+            bottom: 30px;
+            right: 40px;
+            width: 180px;
+            height: 120px;
+            background: 
+                radial-gradient(ellipse at center, rgba(40, 20, 5, 0.75) 0%, rgba(139, 101, 8, 0.45) 50%, rgba(139, 101, 8, 0.1) 80%, rgba(0,0,0,0) 100%);
+            border-radius: 50%;
+            pointer-events: none;
+            filter: blur(3px);
+            mix-blend-mode: multiply;
+        }
+
+        /* Treść pamiętnika */
+        .diary-content {
+            font-family: 'Caveat', cursive;
+            font-size: 1.45rem;
+            line-height: 1.35;
+            letter-spacing: 0.5px;
+            text-align: justify;
+            transform: rotate(-0.5deg);
+        }
+
+        .diary-content p {
+            margin-bottom: 18px;
+            text-indent: 20px;
+        }
+
+        .diary-content p:first-of-type {
+            text-indent: 0;
+        }
+
+        /* Stylizacja pod wydruk */
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+                justify-content: flex-start;
+            }
+            .print-btn {
+                display: none !important;
+            }
+            .journal-page {
+                box-shadow: none;
+                border: none;
+                transform: none;
+                max-width: 100%;
+                clip-path: none;
+                background: white;
+            }
+            .blood-fingerprint-1, .blood-fingerprint-2, .blood-splatter, .wax-stain {
+                opacity: 0.3;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<style>
+  .wiki-nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 10px 20px;
+    background: rgba(7, 12, 10, 0.96);
+    border-bottom: 1px solid #2a5040;
+    font-family: 'Special Elite', 'Georgia', cursive;
+    font-size: 0.82rem;
+    letter-spacing: 0.05em;
+    backdrop-filter: blur(4px);
+  }
+  .wiki-nav a {
+    color: #5db87a;
+    text-decoration: none;
+    padding: 6px 14px;
+    border-radius: 4px;
+    border: 1px solid transparent;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .wiki-nav a:hover {
+    background: #0a2318;
+    border-color: #2a5040;
+    color: #fff;
+  }
+  .wiki-nav .home-link {
+    color: #c9a96e;
+    font-weight: bold;
+    border-color: #3d5a3a;
+  }
+  .wiki-nav .nav-siblings {
+    display: flex;
+    gap: 6px;
+  }
+  .wiki-nav .nav-label {
+    color: #3d7a52;
+    padding: 0 8px;
+    font-size: 0.75rem;
+    flex-shrink: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  body { padding-top: 52px !important; }
+  @media print { .wiki-nav { display: none !important; } body { padding-top: 0 !important; } }
+</style>
+<nav class="wiki-nav">
+  <a class="home-link" href="../index.html">&#8962; Biblioteka Graczy</a>
+  <span class="nav-label">Dziennik Wielebnego Michaela Thomasa</span>
+  <div class="nav-siblings">
+    <a href="bilioteka_notaka_-_odejście-pana-corbitta.html">&#8592; Biblioteka — Odejście Corbitta</a>
+  </div>
+</nav>
+
+
+    <button class="print-btn" onclick="window.print()">
+        <span>🖨️ Drukuj pomoc</span>
+    </button>
+
+    <div class="journal-page">
+        <div class="blood-fingerprint-1"></div>
+        <div class="blood-fingerprint-2"></div>
+        <div class="blood-splatter"></div>
+        <div class="wax-stain"></div>
+        
+        <div class="diary-content">
+            <p>Nie ma tam spokojnego snu ani bezpiecznej drogi prócz Tego, Kto Otwiera. Ukryte drzwi i tajemne przejście przełamią bariery materii. Rozkoszne i pulsujące życiem prawdy wlał we mnie Przewielebny Walter Corbitt.</p>
+            
+            <p>Ja, Michael Thomas, nieustraszony sługa Prawdy, pojmuję teraz bezkresną istotę wytycznych naszego Nieśmiertelnego Mistrza. Szedłem za śladami zakopanymi w błocie tamtej wspaniałej, nieświętej krypty i dostrzegłem, jak wolna wola dawno przekroczyła próg rygoru ziemskiej kruchości. Jego spuścizna została zabezpieczona wedle woli; Mroczne wnętrze Ziemi skrywa jego prastare dziedzictwo, zrodzone na obrzeżach kosmosu.</p>
+            
+            <p>A Ci z Pustki Między Gwiazdami (Them from the Blackness) znają Jego zapieczętowany dół i oczekują! Oczekują powrotu Przebudzonego z Otchłani! Zbawienie czeka wyznawców ukrytych drzwi...</p>
+        </div>
+    </div>
+
+</body>
+</html>
