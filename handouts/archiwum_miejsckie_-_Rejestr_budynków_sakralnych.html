@@ -202,6 +202,70 @@
 </head>
 <body>
 
+
+<style>
+  .wiki-nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 10px 20px;
+    background: rgba(7, 12, 10, 0.96);
+    border-bottom: 1px solid #2a5040;
+    font-family: 'Special Elite', 'Georgia', cursive;
+    font-size: 0.82rem;
+    letter-spacing: 0.05em;
+    backdrop-filter: blur(4px);
+  }
+  .wiki-nav a {
+    color: #5db87a;
+    text-decoration: none;
+    padding: 6px 14px;
+    border-radius: 4px;
+    border: 1px solid transparent;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .wiki-nav a:hover {
+    background: #0a2318;
+    border-color: #2a5040;
+    color: #fff;
+  }
+  .wiki-nav .home-link {
+    color: #c9a96e;
+    font-weight: bold;
+    border-color: #3d5a3a;
+  }
+  .wiki-nav .nav-siblings {
+    display: flex;
+    gap: 6px;
+  }
+  .wiki-nav .nav-label {
+    color: #3d7a52;
+    padding: 0 8px;
+    font-size: 0.75rem;
+    flex-shrink: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  body { padding-top: 52px !important; }
+  @media print { .wiki-nav { display: none !important; } body { padding-top: 0 !important; } }
+</style>
+
+<nav class="wiki-nav">
+  <a class="home-link" href="../index.html">&#8962; Biblioteka Graczy</a>
+  <span class="nav-label">Archiwum — Budynki sakralne</span>
+  <div class="nav-siblings">
+    <a href="akta-policyjne_-_rozbicie_kultu.html">&#8592; Akta — Rozbicie Kultu</a>
+    <a href="archiwum_miejsckie_-_wyrok_sądu.html">Archiwum — Wyrok sądu &#8594;</a>
+  </div>
+</nav>
+
+
     <button class="print-btn" onclick="window.print()">
         <span>🖨️ Drukuj pomoc</span>
     </button>
