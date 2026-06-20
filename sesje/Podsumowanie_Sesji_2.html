@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Podsumowanie Sesji II — Boston, Listopad 1920</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Special+Elite&family=Marck+Script&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #0e1318;
+            background-image:
+                radial-gradient(ellipse at 20% 20%, rgba(60, 30, 10, 0.18) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 80%, rgba(30, 20, 50, 0.2) 0%, transparent 60%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 50px 20px 80px;
+            font-family: 'Georgia', serif;
+            min-height: 100vh;
+        }
+
+        /* Przycisk drukowania */
+        .print-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 14px;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .print-btn:hover {
+            background-color: #1a252f;
+            transform: translateY(-2px);
+        }
+
+        /* Główny pergamin */
+        .document {
+            background-color: #f0e8d2;
+            background-image:
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)' opacity='0.06'/%3E%3C/svg%3E");
+            color: #1a150e;
+            width: 100%;
+            max-width: 780px;
+            padding: 70px 65px;
+            box-shadow:
+                0 25px 60px rgba(0, 0, 0, 0.75),
+                inset 0 0 80px rgba(100, 70, 20, 0.15),
+                inset 0 0 3px rgba(0, 0, 0, 0.1);
+            border: 1px solid #d4c9a8;
+            position: relative;
+        }
+
+        /* Pionowa linia marginalna */
+        .document::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 55px;
+            bottom: 0;
+            border-left: 1px solid rgba(160, 100, 40, 0.2);
+        }
+
+        /* Plamy starzenia */
+        .age-stain {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .stain-1 {
+            top: 40px;
+            right: 60px;
+            width: 80px;
+            height: 60px;
+            background: radial-gradient(ellipse, rgba(139, 90, 20, 0.12) 0%, transparent 70%);
+        }
+
+        .stain-2 {
+            bottom: 80px;
+            left: 40px;
+            width: 100px;
+            height: 70px;
+            background: radial-gradient(ellipse, rgba(100, 70, 20, 0.1) 0%, transparent 70%);
+        }
+
+        .stain-3 {
+            top: 50%;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: radial-gradient(ellipse, rgba(120, 80, 30, 0.08) 0%, transparent 70%);
+        }
+
+        /* Nagłówek dokumentu */
+        .doc-header {
+            text-align: center;
+            border-bottom: 3px double #3a2e1e;
+            padding-bottom: 22px;
+            margin-bottom: 35px;
+            position: relative;
+        }
+
+        .doc-eyebrow {
+            font-family: 'Special Elite', monospace;
+            font-size: 0.72rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: #6b5030;
+            margin-bottom: 12px;
+        }
+
+        .doc-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.1rem;
+            font-weight: 900;
+            color: #1a120a;
+            line-height: 1.2;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .doc-subtitle {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 1rem;
+            color: #5a4020;
+            letter-spacing: 0.5px;
+        }
+
+        .doc-meta {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 14px;
+            font-family: 'Special Elite', monospace;
+            font-size: 0.68rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #7a6040;
+            padding: 0 5px;
+        }
+
+        /* Rozdziały */
+        .chapter {
+            margin-bottom: 40px;
+        }
+
+        .chapter-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.25rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #1a120a;
+            border-bottom: 1px solid rgba(58, 46, 30, 0.35);
+            padding-bottom: 6px;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .chapter-title::before {
+            content: '✦';
+            font-size: 0.8rem;
+            color: #8b6030;
+            flex-shrink: 0;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1rem;
+            font-weight: 700;
+            font-style: italic;
+            color: #3a2810;
+            margin: 22px 0 10px;
+        }
+
+        /* Treść */
+        p {
+            font-size: 0.95rem;
+            line-height: 1.75;
+            text-align: justify;
+            color: #1e1810;
+            margin-bottom: 12px;
+            text-indent: 20px;
+        }
+
+        p:first-of-type {
+            text-indent: 0;
+        }
+
+        /* Inicjał */
+        .chapter:first-of-type p:first-of-type::first-letter {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.8rem;
+            font-weight: 900;
+            float: left;
+            line-height: 0.8;
+            margin-right: 8px;
+            margin-top: 6px;
+            color: #3a1a08;
+        }
+
+        /* Cytaty / dokumenty odkryte */
+        .handout-box {
+            background-color: rgba(200, 180, 130, 0.25);
+            border-left: 3px solid #8b6030;
+            border-right: 1px solid rgba(139, 96, 48, 0.3);
+            padding: 14px 20px;
+            margin: 18px 0;
+            position: relative;
+        }
+
+        .handout-label {
+            font-family: 'Special Elite', monospace;
+            font-size: 0.65rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: #8b6030;
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        .handout-box p {
+            font-style: italic;
+            font-size: 0.9rem;
+            color: #2a1e10;
+            text-indent: 0;
+            margin-bottom: 4px;
+        }
+
+        /* Komentarz MG */
+        .gm-note {
+            font-family: 'Marck Script', cursive;
+            font-size: 1.1rem;
+            color: #3a4a5a;
+            line-height: 1.5;
+            border-left: 2px solid rgba(58, 74, 90, 0.4);
+            padding-left: 15px;
+            margin: 20px 0 20px 10px;
+        }
+
+        /* Separator */
+        .ornament {
+            text-align: center;
+            color: #8b6030;
+            font-size: 1.2rem;
+            letter-spacing: 12px;
+            margin: 30px 0;
+            opacity: 0.7;
+        }
+
+        /* Stopka */
+        .doc-footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 2px double #3a2e1e;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .footer-left {
+            font-family: 'Special Elite', monospace;
+            font-size: 0.65rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #7a6040;
+            line-height: 1.8;
+        }
+
+        .footer-sig {
+            font-family: 'Marck Script', cursive;
+            font-size: 1.5rem;
+            color: #1c2d1a;
+            text-align: right;
+        }
+
+        .footer-sig-sub {
+            font-family: 'Georgia', serif;
+            font-size: 0.72rem;
+            font-style: italic;
+            color: #666;
+            text-align: right;
+            margin-top: 2px;
+            letter-spacing: 1px;
+        }
+
+        /* Epilog – wyróżnienie */
+        .epilog {
+            background-color: rgba(30, 15, 5, 0.05);
+            border: 1px solid rgba(139, 96, 48, 0.25);
+            padding: 25px 30px;
+            margin-top: 10px;
+        }
+
+        .epilog p {
+            font-size: 0.93rem;
+        }
+
+        .epilog .chapter-title {
+            border-bottom-color: rgba(58, 46, 30, 0.2);
+        }
+
+        /* Drukowanie */
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .print-btn {
+                display: none;
+            }
+
+            .document {
+                box-shadow: none;
+                border: none;
+                max-width: 100%;
+                background: white;
+            }
+
+            .document::before {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<style>
+  .wiki-nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 10px 20px;
+    background: rgba(7, 12, 10, 0.96);
+    border-bottom: 1px solid #2a5040;
+    font-family: 'Special Elite', 'Georgia', cursive;
+    font-size: 0.82rem;
+    letter-spacing: 0.05em;
+    backdrop-filter: blur(4px);
+  }
+  .wiki-nav a {
+    color: #5db87a;
+    text-decoration: none;
+    padding: 6px 14px;
+    border-radius: 4px;
+    border: 1px solid transparent;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .wiki-nav a:hover {
+    background: #0a2318;
+    border-color: #2a5040;
+    color: #fff;
+  }
+  .wiki-nav .home-link {
+    color: #c9a96e;
+    font-weight: bold;
+    border-color: #3d5a3a;
+    flex-shrink: 0;
+  }
+  .wiki-nav .nav-siblings {
+    display: flex;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+  .wiki-nav .nav-label {
+    color: #3d7a52;
+    padding: 0 8px;
+    font-size: 0.75rem;
+    flex-shrink: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-align: center;
+  }
+  .wiki-nav .nav-disabled {
+    color: #1e3028;
+    padding: 6px 14px;
+    white-space: nowrap;
+    cursor: default;
+  }
+  body { padding-top: 52px !important; }
+  @media print { .wiki-nav { display: none !important; } body { padding-top: 0 !important; } }
+</style>
+<nav class="wiki-nav">
+  <a class="home-link" href="../index.html">&#8962; Biblioteka Graczy</a>
+  <span class="nav-label">Sesja II &mdash; Oczy w Lustrze</span>
+  <div class="nav-siblings">
+    <a href="Podsumowanie_Sesji_1.html">&#8592; Sesja I</a>
+    <span class="nav-disabled">brak &#8594;</span>
+  </div>
+</nav>
+
+<button class="print-btn" onclick="window.print()">🖨️ Drukuj</button>
+
+    <div class="document">
+
+        <div class="age-stain stain-1"></div>
+        <div class="age-stain stain-2"></div>
+        <div class="age-stain stain-3"></div>
+
+        <!-- NAGŁÓWEK -->
+        <div class="doc-header">
+            <div class="doc-eyebrow">Kronika Badaczy · Sesja II</div>
+            <div class="doc-title">Oczy w Lustrze</div>
+            <div class="doc-subtitle">Kontynuacja dochodzenia — dom, sanatorium i ruiny kaplicy</div>
+            <div class="doc-meta">
+                <span>10–11 listopada 1920 r.</span>
+                <span>Materiał zastrzeżony</span>
+                <span>Boston, Massachusetts</span>
+            </div>
+        </div>
+
+        <!-- ŚRODA WIECZÓR -->
+        <div class="chapter">
+            <div class="chapter-title">Środa, 10 listopada — powrót do domu</div>
+
+            <div class="section-title">Narada i podział sił</div>
+            <p>Wieczorem wszyscy pięcioro spotykają się i omawiaja wszystko czego do tej pory zdołali się dowiedzieć.
+                Informacje splatają się w niepokojący wzór: Walter Corbitt, Kaplica Kontemplacji, obłąkany pan
+                Macario. Każdy szczegół pasuje do pozostałych zbyt idealnie, by być przypadkiem. Po wymianie notatek
+                Szulerka i Profesor rozchodzą się do swoich domów. Pozostała trójka — Pisarka, Studentka i Detektyw —
+                postanawia jednak wrócić pod dobrze już im znany adres przy bocznej uliczce śródmieścia.</p>
+            <p>Powód jest prosty: sąsiadka Pani Cormier wspominała płonące oczy w oknie na piętrze. Chcą je zobaczyć
+                na własne oczy — jeśli mają tu być o zmroku, to właśnie teraz.</p>
+
+            <div class="section-title">Żarzące się ślepia</div>
+            <p>Dom wita ich swoją zwykłą ciszą i wręcz grobowym spokojem. Studentka, gdy
+                tylko staje przed fasadą, unosi wzrok ku piętrze. Jedno z okien nie jest ciemne. W środku coś
+                tli się bladym, żółtawym blaskiem — nieruchome punkty, zbyt regularne, by były odbiciem latarni.
+                Oczy. Patrzą prosto na nią.</p>
+            <p>Trójka wchodzi do środka.</p>
+
+            <div class="section-title">Piętro: łazienka i kapanie</div>
+            <p>Na korytarzu na parterze słyszą dźwięk — <em>kap… kap… kap…</em> — miarowe, powolne, bijące echem o kafelki. Dźwięki dochodzą z góry gdzie i tak zmierzli, wchodzą schodami na pietro. Pierwsze pomieszczeni na jakie natrafiają to łazienka. Pomieszczenie jest wyjątkowo wąskie i wysokie, pokryte osypującymi się wyblakłymi kafelkami rodem z wojskowego szpitala. Gigantyczna żeliwna wanna na mosiężnych lwich łapach brutalnie dominuje przestrzeń. Wnętrze wanny na wysokości kranu pokryte jest brązowym osadem ułożonym w koncentryczne kręgi rdzy.</p>
+            <p>Kran jednak i wszystko w pomieszczeniu jest suche, a kapanie ustaje.
+                Badacze cofają się w milczeniu.</p>
+
+            <div class="section-title">Sypialni przy łazience: atak łóżka</div>
+            <p>Sąsiednie pomieszczenie emanuje fizyczną, jawną wrogością już od progu. Puste mosiężne łóżko o grubej
+                ramie stoi nienaturalnie odizolowane na skraju zapadniętego dywanu. W rogu czai się stary, misternie
+                rzeźbiony kredens. Smród rozkłądu który badacze czuli tuż przed wejścieh, nasila jest tu znacznie wyraźniejszy.</p>
+            <p>Badacze zaczynają przeszukiwać pokój. Gdy Studentka podchodzi ku oknu — łóżko rusza. Nie skrzypi,
+                nie przesuwa się powoli. Unosi się i z impetem leci w jej stronę. Studentka w ostatniej chwili
+                robi unik. Łóżko uderza w okno z głuchym, metalicznym łomotem. Ona sama pada na podłogę z ranami
+                na tyle drobnymi, by wstać — i na tyle bolesnymi, by pamiętać ten moment przez długi czas.</p>
+            <p>Trójka podejmuje jedyną rozsądną decyzję: wychodzą.</p>
+
+            <div class="section-title">Twarz w lustrze</div>
+            <p>Schodzą schodami. Pisarka idzie jako ostatnia i gdy ma już wehść na schody, słyszy kapanie — znowu, wyraźnie,
+                wołające z łazienki. Każe reszcie iść dalej, sama zawraca ku źródlu dźwięku. Staje przed umywalką. Patrzy w lustro nad nię. Nie widzi jednak swojego odbicia. Płonące oczy patrzą na nią z odbicia i wwiercają płonącym spojrzeniem.</p>
+            <p>Pisarka schodzi ze schodów dwa razy szybciej, niż na nie wchodziła.</p>
+
+            <div class="section-title">Inna rzeczywistość na schodach</div>
+            <p>Osłabioną Studentkę pisarka i detektyw podtrzymują od połowy schodów. W tym momencie — być może
+                z powodu uderzenia, być może z czegoś głębszego i znacznie gorszego — Studentka zaczyna widzieć
+                rzeczy, których nie powinno tu być.</p>
+            <p>Pisarka zmienia się w kobietę w stroju sprzed stu lat — surowy gorset, tiurniura, ciemna
+                wełna. Detektyw staje się mężczyzną z początku XIX wieku, w wysokim kołnierzu i surdurze. Oboje
+                patrzą na nią z czułością, jakiej nie ma w twarzach ludzi, których zna od kilku dni.</p>
+            <p><em>Jesteś z nami spokrewniona</em>, mówią. <em>Jesteś potomkinią Waltera Corbita.</em></p>
+            <p>Potem wizja znika. Na schodach stoją tylko Pisarka i Detektyw, nieco zaniepokojeni jej miną.</p>
+
+            <div class="gm-note">Trójka rozchodzi się do domów w milczeniu. Jest co przemyśleć przez noc.</div>
+        </div>
+
+        <div class="ornament">— ✦ —</div>
+
+        <!-- CZWARTEK -->
+        <div class="chapter">
+            <div class="chapter-title">Czwartek, 11 listopada — dzień bez wytchnienia</div>
+
+            <div class="section-title">Biuro Pana Knotta: zaliczka</div>
+            <p>Rano cała piątka zbiera się w biurze zleceniodawcy. Pani Borzenka jest w dobrym humorze i nie wspokmina o nie miłym porzegnaniu dnia popdzedniego. Po omówieniu postępów w śledztwi, badacze otrzymują umówioną zaliczkę.
+                Badacze wychodzą z gotówką i listą spraw do załatwienia.</p>
+
+            <div class="section-title">Zakupy</div>
+            <p>Pierwszym przystankiem jest księgarnia. Szulerka szuka czegoś pomocnego — literatury okultystycznej,
+                historycznej, czegokolwiek rzucającego światło na Corbita lub Kaplicę. Niestety półki oferują
+                powieści przygodowe i poradniki kulinarne, a jedunu dział sugerujący posiadanie widzy okultystycznej okazuje się być raczej zbiorem fantacji i prób wyłuydzenia pieniedzy przez podrżędnych pisarzy. Odpytywana obłsuga sugeriuje raczej inne źróbła w mieście i rozmowy z uczestnikami interesujących ich wydarzeń. Badacze wychodzą z księgarni z pustymi rękami.</p>
+            <p>Drugi przystanek to dzielnica kupiecka w okolicach doków na południu miasta. Hałas, zapach ryb
+                i smoły, naganiacze przy każdym wejściu. Badacze robią nie skromne zakupy, w tym — z myśląc o tym,
+                co może ich jeszcze spotkać i co może im się przydać — broń palną i białą.</p>
+
+            <div class="section-title">Sanatorium w Roxbury: Vittorio Macario</div>
+            <p>Budynek sanatorium w Roxbury nie ma w sobie nic niepokojącego, no może poza kratami w części okien — jest po prostu smutny i zmęczony,
+                jak większość miejsc, do których ludzie trafiają wbrew własnej woli. Dozorca kieruje badaczy
+                do lekarza, lekarz — po tym, jak Studentka przekonuje go, że pisze pracę naukową o traumach
+                — prowadzi ich długim korytarzem do pokoju pana Macario.</p>
+            <p>Po drodze słychać krzyk i głuchy łomot dobiegający z różnych pokoi. Pomieszczenia wyglądają raczej
+                jak cele niż pokoje.</p>
+            <p>Pan Vittorio Macario siedzi w fotelu i buja się miarowo. W rękach trzyma zamkniętą książkę. Na próby
+                nawiązania kontaktu nie reaguje — jego wzrok jest skierowany w punkt, którego nie ma na ścianie.
+                Potem, bez ostrzeżenia, otwiera książkę, przesuwa palec po stronie i wskazuje konkretny wers.
+                Obraca głowę ku badaczom.</p>
+            <p>— <em>Swoją bronią Szatan zostanie pokonany!!!</em> — wykrzykuje, po czym zaczyna się szamotać
+                i krzyczeć. Lekarz i potężnie zbudowany pielęgniarz wchodzą do akcji. Badacze zostają poproszeni
+                o opuszczenie pokoju.</p>
+
+            <div class="section-title">Sanatorium: Gabriela Macario</div>
+            <p>Zamieszanie okazuje się opatrznościowe. Korzystając z tego, że lekarz ma pełne ręce roboty,
+                badacze wchodzą do sąsiedniego pokoju. Pani Gabriela Macario siedzi przy stoliku, obok
+                niej leży notes lub dziennik. Patrzy na intruzów spokojnie — choć w jej oczach tli się coś,
+                co mogłoby być lękiem, gdyby miała jeszcze siłę go okazywać.</p>
+            <p>Profesor podejmuje się rozmowy. Pani Macario odpowiada powoli, dobierając słowa z ostrożnością
+                kogoś, kto nauczył się, że nie każde słowa warto wypowiadać. Mówi o obserwacji — o czymś, co ją
+                śledziło, zawsze gdzieś z boku, zawsze w cieniu. Postać, która nie lubiła jej męża Vittoria.
+                Która <em>patrzyła</em>.</p>
+            <p>Rozmowa urywa się gwałtownie: za ścianą milknie krzyk, słychać kroki lekarza na korytarzu.
+                Badacze wyślizgują się z pokoju tuż przed tym, nim drzwi do pokoju pana Macario otwierają
+                się na oścież. Lekarz odprowadza ich do holu i żegna z widoczną ulgą.</p>
+            <p>Po wyjściu z sanatorium badacze są pewni jednego: czas odwiedzić Kaplicę Kontemplacji.</p>
+
+            <div class="ornament">— ✦ —</div>
+
+            <div class="section-title">Kaplica Kontemplacji: ruiny</div>
+            <p>Dawniej pewnie dość schludny budynek, to dziś ponure pobojowisko. Poczerniale, gnijące belki
+                z czarnego drewna piętrzą się w nieładzie. Ceglane filary wcinają się w bostońskie niebo
+                jak połamane żebra w otwartej ranie. Kwaśny smród mokrego sadzy i rozkładających się trucheł
+                kotów wciśniętych w szczeliny mury jest niemal namacalny. Panuje tu upiorna aura absolutnej pustki —
+                mimo śmieci i okolicznych włóczęgów plac świeci zupełnymi pustkami nawet za dnia.</p>
+            <p>Badacze rozpoznają symbol wyryty nad wejściem — ten sam, który opisują dokumenty policyjne. Kaplica
+                Kontemplacji. Wchodzą.</p>
+
+            <div class="section-title">Bóle głowy i zawalona podłoga</div>
+            <p>Ledwo przekraczają próg, zaczyna boleć ich głowy — niewyraźnie, jak ostrzeżenie. Studentka reaguje
+                najsilniej. Pomieszczenie jest mroczne, cichsze nawet od ulicy za murem. Badacze rozglądają się
+                i zaczynają ostrożnie eksplorować ruiny.</p>
+            <p>Nie dość ostrożnie.</p>
+            <p>W okolicach dawnego ołtarza podłoga zapada się bez ostrzeżenia. Profesor, Szulerka i Pisarka
+                wpadają poziom niżej w tumanie kurzu i pęku próchniczego drewna. Detektyw i Studentka zostają
+                na górze. Profesor obrywa najpoważniej — upada niezgrabnie na gruz i przez chwilę
+                jest pewne, że coś sobie złamał. Na szczęście to tylko siniaki, choć pokaźnych rozmiarów.</p>
+
+            <div class="section-title">Podziemia: gruzowisko i sekretna szuflada</div>
+            <p>Na dolnym poziomie niewiele widać. Pisarka zapala swoją lampę naftową. W jej świetle wyłania się pomieszczenie w którym się znajdują, pełne gruzu wolgoci i zbutwiałych desek — na ściane znajdują trzwi, zapieczętowane od dawna wilgocią i zapomnienia.
+                W tym czasie Detektyw i Studentka, z poziomu wyżej, odkrywają za ołtarzem schody prowadzące w dół i zasypane gruzem. Zaczynają powoli odgruzowywanie przejśćie dla uwięzionych poniżej towarzyszy.</p>
+            <p>W podziemu, po przejściu za drzwi padacze znajdują pomieszczenie przypominajace biuro. Naśrodku znajduje się biurko z solidnego drewna oraz duża biblioteczkan naścianie. Profesro bada viurko, szuflady są puste — pozornie. Profesor dostrzega
+                nieregularność w proporcjach środkowej szuflady. Szulerka wyczuwa w niej ukryty mechanizm i otwiera
+                drugie dno.</p>
+
+            <div class="handout-box">
+                <span class="handout-label">Znalezisko · Dziennik Wielebnego Michaela Thomasa</span>
+                <p>Oprawiony w skórę tom, który — kiedy się mu przypatrzeć uważniej — niepokojąco przypomina
+                    ludzką. Inicjały wytłoczone na okładce: <em>M.T.</em> Strony pożółkłe, pismo drobne
+                    i staranne. Autor był duchownym — i najwyraźniej wiedział rzeczy, których poznanie zrozumienie mogło prowadzić do szaleństwa.</p>
+            </div>
+
+            <div class="section-title">Tajemnicza księga w biblioteczce</div>
+            <p>Pisarka przeszukuje tymczasem biblioteczkę. Na jednej z półek rząd
+                identycznych, zakurzonych woluminów — i jeden, który się wyróżnia. Grzbiet jest inny.
+                Papier cięższy. Pisarka wyjmuje go. Profesor i Studentka próbują się wgryźć w tekst, ale łacina,
+                którą napisano tę księgę, jest archaiczna i skomplikowana. Żadne z nich nie może jej
+                odczytać.</p>
+
+            <div class="section-title">Czas wyjść na powierzchnię</div>
+            <p>W głębi podziemnego babinetu badacze znajdują drzwi. Profesor otwiera je z wysiłkiem. Za nimi schody — te same,
+                które odgruzowuje teraz detektyw z góry. W tej samej chwili część zawaliska zsuwająca się z
+                wyższego poziomu spada wprost na niego. Znowu. Profesor przyjmuje to z godnością
+                człowieka, który ma pogodził się z tym że pechowy dzień.</p>
+            <p>Następne kilka godzin to mozolna praca: gruz po gruzie, belka po belce. Wreszcie schody są na tyle odgruzowane by pozwolić człowiekowi się przecisnać. Badacze wydostają się na powierzchnię ruin w milczeniu, pokryci pyłem i zmęczeni
+                bardziej, niż chcieliby przyznać.</p>
+
+            <div class="gm-note">Na zewnątrz bóle głowy ustępują natychmiast. Badacze stoją wśród ruin i zastanawiają
+                się, co dalej. Mają dziennik duchownego, księgę po łacinie, której
+                nikt nie umie przeczytać, i rosnącą świadomość tego że distoria domu może być straszniejsza niż spodziewali się tego przyjmując zlecenie śledztwa.</div>
+        </div>
+
+        <div class="ornament">— ✦ —</div>
+
+        <!-- EPILOG -->
+        <!-- <div class="epilog"> -->
+            <!-- <div class="chapter"> -->
+                <!-- <div class="chapter-title">Stan wiedzy po drugiej sesji</div> -->
+                <!-- <p>Dom przy zaułku ma coś, co nie jest naturalne — i to coś reaguje na obecność badaczy. -->
+                    <!-- Studentka słyszy głosy genealogiczne. Pisarka widziała coś w lustrze, czego nie chce -->
+                    <!-- opisywać. Profesor ledwo chodzi po kolei stłuczeń.</p> -->
+                <!-- <p>Dziennik Wielebnego Thomasa może być kluczem. Tajemnicza łacińska księga może być czymś -->
+                    <!-- jeszcze ważniejszym — lub znacznie gorszym. Pan Macario wrzeszczał coś o szatanie i broni. -->
+                    <!-- Gabriela Macario mówiła o postaci, która obserwuje.</p> -->
+                <!-- <p>Badacze mają kilka nici. Muszą teraz zdecydować, którą pociągną najpierw.</p> -->
+            <!-- </div> -->
+        <!-- </div> -->
+
+        <!-- STOPKA -->
+        <div class="doc-footer">
+            <div class="footer-left">
+                Sesja I · Boston, Massachusetts<br>
+                10-11 Listopada, Roku Pańskiego 1920<br>
+                Materiał przeznaczony dla Strażnika Tajemnic
+            </div>
+            <div>
+                <div class="footer-sig">Strażnik Tajemnic</div>
+                <div class="footer-sig-sub">Kronikarz zdarzeń</div>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>
