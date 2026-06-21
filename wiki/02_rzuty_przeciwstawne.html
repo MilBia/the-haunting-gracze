@@ -232,15 +232,21 @@
   }
   .wiki-nav a:hover { background: #0a2318; border-color: #2a5040; color: #fff; }
   .wiki-nav .home-link { color: #c9a96e; font-weight: bold; border-color: #3d5a3a; flex-shrink: 0; }
-  .wiki-nav .nav-label { color: #3d7a52; padding: 0 8px; font-size: 0.75rem; }
+  .wiki-nav .nav-siblings { display: flex; gap: 6px; flex-shrink: 0; }
+  .wiki-nav .nav-label { color: #3d7a52; padding: 0 8px; font-size: 0.75rem; flex-shrink: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-align: center; }
+  .wiki-nav .nav-disabled { color: #1e3028; padding: 6px 14px; white-space: nowrap; cursor: default; }
   body { padding-top: 52px !important; }
   @media print { .wiki-nav { display: none !important; } body { padding-top: 0 !important; } }
 </style>
 <nav class="wiki-nav">
   <a class="home-link" href="../index.html">&#8962; Biblioteka Graczy</a>
   <span class="nav-label">Rzuty Przeciwstawne</span>
-  <div></div>
+  <div class="nav-siblings">
+    <a href="01_rzuty_na_umiejetnosci.html">&#8592; Rzuty na Umiejętności</a>
+    <a href="03_rzuty_na_szczescie.html">Rzuty na Szczęście &#8594;</a>
+  </div>
 </nav>
+
 <div class="container">
     <h1>⚔️ Rzuty Przeciwstawne</h1>
     <p class="subtitle">Call of Cthulhu 7. Edycja — System Gry</p>
