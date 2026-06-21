@@ -27,7 +27,7 @@
         /* Przycisk Drukuj */
         .print-btn {
             position: fixed;
-            top:  72px;
+            top: 20px;
             right: 20px;
             padding: 12px 20px;
             background-color: #2c3e50;
