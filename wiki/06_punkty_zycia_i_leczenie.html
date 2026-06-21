@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CoC – Punkty Życia, Rany i Leczenie</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background: #0f172a;
+            color: #e2e8f0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+        h1 {
+            text-align: center;
+            font-size: 2rem;
+            color: #fb7185;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.4rem;
+        }
+        .subtitle {
+            text-align: center;
+            color: #94a3b8;
+            margin-bottom: 2.5rem;
+            font-size: 0.95rem;
+        }
+        .container { max-width: 920px; margin: 0 auto; }
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #fb7185;
+            margin-bottom: 1rem;
+            border-left: 4px solid #fb7185;
+            padding-left: 0.7rem;
+        }
+
+        /* HP BAR */
+        .hp-wrap {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .hp-bar-labels { display: flex; justify-content: space-between; font-size: 0.82rem; color: #94a3b8; margin-bottom: 0.5rem; }
+        .hp-bar-outer  { background: #0f172a; border-radius: 8px; height: 36px; overflow: visible; border: 1px solid #334155; position: relative; }
+        .hp-bar-fill {
+            height: 100%;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            padding-left: 0.8rem;
+            font-weight: 700;
+            font-size: 1rem;
+            color: #fff;
+            position: relative;
+        }
+        .hp-zone-full   { width: 100%; background: linear-gradient(90deg, #34d399 0%, #fbbf24 50%, #ef4444 100%); border-radius: 8px; height: 100%; display: flex; align-items: center; }
+        .hp-markers {
+            display: flex;
+            gap: 1rem;
+            margin-top: 0.8rem;
+            flex-wrap: wrap;
+        }
+        .hp-marker {
+            border-radius: 6px;
+            padding: 0.3rem 0.8rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        .hm-green  { background: #1c3526; border: 1px solid #34d399; color: #6ee7b7; }
+        .hm-yellow { background: #451a03; border: 1px solid #fbbf24; color: #fde68a; }
+        .hm-red    { background: #450a0a; border: 1px solid #ef4444; color: #fca5a5; }
+        .hm-black  { background: #1e293b; border: 1px solid #64748b; color: #94a3b8; }
+
+        /* HP STATES CARDS */
+        .states-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        .state-card {
+            border-radius: 10px;
+            padding: 1rem 1.2rem;
+            border: 2px solid;
+        }
+        .sc-ok    { border-color: #34d399; background: #0a1f16; }
+        .sc-wound { border-color: #fbbf24; background: #1a1005; }
+        .sc-dying { border-color: #ef4444; background: #1a0505; }
+        .sc-dead  { border-color: #64748b; background: #0f172a; }
+        .state-icon { font-size: 1.8rem; margin-bottom: 0.4rem; }
+        .state-name { font-weight: 700; font-size: 1rem; margin-bottom: 0.3rem; }
+        .sc-ok    .state-name { color: #34d399; }
+        .sc-wound .state-name { color: #fbbf24; }
+        .sc-dying .state-name { color: #ef4444; }
+        .sc-dead  .state-name { color: #94a3b8; }
+        .state-desc { font-size: 0.83rem; color: #cbd5e1; line-height: 1.5; }
+
+        /* FLOW */
+        .flow { display: flex; flex-direction: column; align-items: center; gap: 0; margin-bottom: 2.5rem; }
+        .flow-box {
+            background: #1e293b;
+            border: 2px solid #fb7185;
+            border-radius: 10px;
+            padding: 0.8rem 1.8rem;
+            text-align: center;
+            min-width: 280px;
+            max-width: 500px;
+            font-size: 0.93rem;
+            font-weight: 600;
+            color: #f1f5f9;
+        }
+        .flow-box.start  { background: #4c0519; }
+        .flow-box.warn   { border-color: #fbbf24; color: #fde68a; }
+        .flow-box.danger { border-color: #ef4444; color: #fca5a5; }
+        .flow-box.good   { border-color: #34d399; color: #6ee7b7; }
+        .arrow { font-size: 1.6rem; color: #475569; line-height: 1; padding: 0.15rem 0; }
+
+        .branch-row {
+            display: flex;
+            gap: 1.2rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 0.2rem 0;
+        }
+        .branch-item { display: flex; flex-direction: column; align-items: center; gap: 0; }
+        .branch-label { font-size: 0.78rem; color: #94a3b8; margin-bottom: 0.2rem; text-align: center; }
+        .result-box {
+            border-radius: 8px;
+            padding: 0.6rem 1.1rem;
+            text-align: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+            min-width: 150px;
+        }
+        .rb-good { background: #1c3526; border: 2px solid #34d399; color: #6ee7b7; }
+        .rb-warn { background: #451a03; border: 2px solid #fbbf24; color: #fde68a; }
+        .rb-bad  { background: #450a0a; border: 2px solid #ef4444; color: #fca5a5; }
+
+        /* HEALING TABLE */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 2rem;
+            font-size: 0.92rem;
+        }
+        th {
+            background: #4c0519;
+            color: #fb7185;
+            padding: 0.7rem 1rem;
+            text-align: left;
+            font-weight: 700;
+            border-bottom: 2px solid #fb7185;
+        }
+        td {
+            padding: 0.65rem 1rem;
+            border-bottom: 1px solid #1e293b;
+            vertical-align: middle;
+        }
+        tr:nth-child(even) td { background: #162032; }
+        tr:nth-child(odd) td  { background: #1e293b; }
+
+        .info-box {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-left: 4px solid #fbbf24;
+            border-radius: 8px;
+            padding: 1rem 1.2rem;
+            margin-bottom: 1.5rem;
+            font-size: 0.92rem;
+            line-height: 1.6;
+            color: #cbd5e1;
+        }
+        .info-box strong { color: #fde68a; }
+
+        /* TIMELINE */
+        .timeline {
+            position: relative;
+            margin-bottom: 2rem;
+        }
+        .timeline-bar {
+            position: absolute;
+            left: 1.5rem;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(180deg, #ef4444 0%, #fbbf24 40%, #34d399 100%);
+            border-radius: 3px;
+        }
+        .timeline-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1.5rem;
+            padding: 0 0 1.2rem 3.5rem;
+            position: relative;
+        }
+        .timeline-dot {
+            position: absolute;
+            left: 0.85rem;
+            top: 0.4rem;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 3px solid;
+            background: #0f172a;
+            flex-shrink: 0;
+        }
+        .td-red    { border-color: #ef4444; }
+        .td-yellow { border-color: #fbbf24; }
+        .td-green  { border-color: #34d399; }
+        .timeline-content {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 0.7rem 1rem;
+            flex: 1;
+        }
+        .tl-title { font-weight: 700; font-size: 0.92rem; margin-bottom: 0.2rem; }
+        .tl-red    { color: #f87171; }
+        .tl-yellow { color: #fde68a; }
+        .tl-green  { color: #6ee7b7; }
+        .tl-desc   { font-size: 0.85rem; color: #94a3b8; line-height: 1.5; }
+
+        footer {
+            text-align: center;
+            color: #475569;
+            font-size: 0.78rem;
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+<style>
+  .wiki-nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 10px 20px;
+    background: rgba(7, 12, 10, 0.96);
+    border-bottom: 1px solid #2a5040;
+    font-family: 'Special Elite', 'Georgia', cursive;
+    font-size: 0.82rem;
+    letter-spacing: 0.05em;
+    backdrop-filter: blur(4px);
+  }
+  .wiki-nav a {
+    color: #5db87a;
+    text-decoration: none;
+    padding: 6px 14px;
+    border-radius: 4px;
+    border: 1px solid transparent;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .wiki-nav a:hover { background: #0a2318; border-color: #2a5040; color: #fff; }
+  .wiki-nav .home-link { color: #c9a96e; font-weight: bold; border-color: #3d5a3a; flex-shrink: 0; }
+  .wiki-nav .nav-label { color: #3d7a52; padding: 0 8px; font-size: 0.75rem; }
+  body { padding-top: 52px !important; }
+  @media print { .wiki-nav { display: none !important; } body { padding-top: 0 !important; } }
+</style>
+<nav class="wiki-nav">
+  <a class="home-link" href="../index.html">&#8962; Biblioteka Graczy</a>
+  <span class="nav-label">Punkty Życia i Leczenie</span>
+  <div></div>
+</nav>
+<div class="container">
+    <h1>❤️ Punkty Życia, Rany i Leczenie</h1>
+    <p class="subtitle">Call of Cthulhu 7. Edycja — System Gry</p>
+
+    <!-- HP BAR -->
+    <p class="section-title">Pasek Punktów Życia (HP)</p>
+    <div class="hp-wrap">
+        <div class="hp-bar-labels">
+            <span>0 — Nieprzytomny / Umierający</span>
+            <span>⅓ HP</span>
+            <span>½ HP (próg ciężkiej rany)</span>
+            <span>Maks. HP</span>
+        </div>
+        <div class="hp-bar-outer">
+            <div class="hp-zone-full" style="padding-left:0.8rem; font-weight:700; font-size:0.85rem; color:#fff;">
+                ← Im niżej, tym gorzej →
+            </div>
+        </div>
+        <div class="hp-markers">
+            <span class="hp-marker hm-green">HP pełne → Normalnie</span>
+            <span class="hp-marker hm-yellow">Strata ≥ ½ HP jednym ciosem → Ciężka Rana</span>
+            <span class="hp-marker hm-red">HP = 0 → Nieprzytomny + ryzyko śmierci</span>
+            <span class="hp-marker hm-black">Strata ≥ maks. HP jednym ciosem → Natychmiastowa śmierć</span>
+        </div>
+    </div>
+
+    <!-- STANY HP -->
+    <p class="section-title">Stany Badacza</p>
+    <div class="states-grid">
+        <div class="state-card sc-ok">
+            <div class="state-icon">💪</div>
+            <div class="state-name">Normalny</div>
+            <div class="state-desc">HP powyżej zera. Brak ciężkich ran. Walczy normalnie.</div>
+        </div>
+        <div class="state-card sc-wound">
+            <div class="state-icon">🩸</div>
+            <div class="state-name">Ciężka Rana</div>
+            <div class="state-desc">Jeden cios zadał ≥ ½ maksymalnych HP. Rzut na KON lub utrata przytomności. Wolniejsze leczenie.</div>
+        </div>
+        <div class="state-card sc-dying">
+            <div class="state-icon">💀</div>
+            <div class="state-name">Umierający</div>
+            <div class="state-desc">HP = 0 po ciężkiej ranie. Rzut KON każdą rundę lub śmierć. Tylko Pierwsza Pomoc może pomóc.</div>
+        </div>
+        <div class="state-card sc-dead">
+            <div class="state-icon">☠️</div>
+            <div class="state-name">Martwy</div>
+            <div class="state-desc">HP = 0 bez ciężkiej rany, ALBO jeden cios ≥ maks. HP. Koniec postaci.</div>
+        </div>
+    </div>
+
+    <!-- FLOW OTRZYMANIA OBRAŻEŃ -->
+    <p class="section-title">Co się dzieje po otrzymaniu obrażeń?</p>
+    <div class="flow">
+        <div class="flow-box start">Badacz otrzymuje obrażenia</div>
+        <div class="arrow">↓</div>
+        <div class="flow-box">Odejmij obrażenia od HP</div>
+        <div class="arrow">↓</div>
+        <div class="flow-box warn">Czy jeden cios zadał ≥ maks. HP?</div>
+        <div class="arrow">↓</div>
+        <div class="branch-row">
+            <div class="branch-item">
+                <span class="branch-label">TAK</span>
+                <div class="result-box rb-bad">☠️ Natychmiastowa śmierć</div>
+            </div>
+            <div class="branch-item">
+                <span class="branch-label">NIE</span>
+                <div class="result-box rb-warn">Sprawdź dalej ↓</div>
+            </div>
+        </div>
+        <div class="arrow">↓</div>
+        <div class="flow-box warn">Czy jeden cios zadał ≥ ½ maks. HP?</div>
+        <div class="arrow">↓</div>
+        <div class="branch-row">
+            <div class="branch-item">
+                <span class="branch-label">TAK</span>
+                <div class="result-box rb-bad">🩸 Ciężka Rana!<br>Rzut na KON lub nieprzytomność</div>
+            </div>
+            <div class="branch-item">
+                <span class="branch-label">NIE</span>
+                <div class="result-box rb-good">Normalna rana</div>
+            </div>
+        </div>
+        <div class="arrow">↓</div>
+        <div class="flow-box warn">Czy HP = 0?</div>
+        <div class="arrow">↓</div>
+        <div class="branch-row">
+            <div class="branch-item">
+                <span class="branch-label">TAK (bez ciężkiej rany)</span>
+                <div class="result-box rb-bad">Nieprzytomny<br>Może umrzeć</div>
+            </div>
+            <div class="branch-item">
+                <span class="branch-label">TAK (z ciężką raną)</span>
+                <div class="result-box rb-bad">💀 Umierający<br>Rzut KON co rundę</div>
+            </div>
+            <div class="branch-item">
+                <span class="branch-label">NIE</span>
+                <div class="result-box rb-good">Walczy dalej</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- LECZENIE -->
+    <p class="section-title">Metody Leczenia</p>
+    <table>
+        <thead>
+            <tr>
+                <th>Metoda</th>
+                <th>Efekt</th>
+                <th>Czas / Warunki</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>🩹 <strong>Pierwsza Pomoc</strong></td>
+                <td>Przywraca <strong>1 HP</strong> + może przywrócić przytomność. Może uratować umierającego (daje czas na Medycynę)</td>
+                <td>Natychmiastowa. Tylko raz na daną ranę</td>
+            </tr>
+            <tr>
+                <td>🏥 <strong>Medycyna</strong></td>
+                <td>Przywraca <strong>1D3 HP</strong>. Na umierającym — umożliwia rzut zdrowienia po tygodniu</td>
+                <td>Przynajmniej 1 godzina + sprzęt medyczny</td>
+            </tr>
+            <tr>
+                <td>⏰ <strong>Naturalny odpoczynek (bez ciężkiej rany)</strong></td>
+                <td>Przywraca <strong>1 HP</strong></td>
+                <td>Co dobę automatycznie</td>
+            </tr>
+            <tr>
+                <td>🛌 <strong>Naturalny odpoczynek (z ciężką raną)</strong></td>
+                <td>Rzut na KON na koniec tygodnia:<br>Zwykły → <strong>1D3 HP</strong><br>Ekstremalny → <strong>2D3 HP</strong> + usuwa stan Ciężkiej Rany</td>
+                <td>Co tydzień. Stan Ciężkiej Rany znika gdy odzyskasz ≥ ½ maks. HP</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- TIMELINE PRZYKŁAD -->
+    <p class="section-title">Przykład Przebiegu Leczenia (Brian, 12 HP)</p>
+    <div class="timeline">
+        <div class="timeline-bar"></div>
+        <div class="timeline-item">
+            <div class="timeline-dot td-red"></div>
+            <div class="timeline-content">
+                <div class="tl-title tl-red">Poniedziałek — Bójka w barze</div>
+                <div class="tl-desc">Trzy ciosy: 4 + 2 + 4 = 10 obrażeń. HP: 12 → 2. Żaden cios nie przekroczył 6 (½ z 12) → brak ciężkiej rany. Leczy się 1 HP / dzień.</div>
+            </div>
+        </div>
+        <div class="timeline-item">
+            <div class="timeline-dot td-yellow"></div>
+            <div class="timeline-content">
+                <div class="tl-title tl-yellow">Czwartek — Upadek z okna</div>
+                <div class="tl-desc">Brian ma 5 HP. Obrażenia: 7. 7 &gt; ½×12 (6) → <strong>Ciężka Rana!</strong> HP: 5 → 0 → Umierający. Przyjaciel używa Pierwszej Pomocy. Brian trafia do szpitala.</div>
+            </div>
+        </div>
+        <div class="timeline-item">
+            <div class="timeline-dot td-yellow"></div>
+            <div class="timeline-content">
+                <div class="tl-title tl-yellow">Tydzień 1 — Szpital</div>
+                <div class="tl-desc">Rzut na KON zdany → 1D3 = 2 HP odzyskane. HP: 0 → 2.</div>
+            </div>
+        </div>
+        <div class="timeline-item">
+            <div class="timeline-dot td-green"></div>
+            <div class="timeline-content">
+                <div class="tl-title tl-green">Tydzień 2 — Ekstremalny sukces CON</div>
+                <div class="tl-desc">Rzut ekstremalny → 2D3 = 4 HP. HP: 2 → 6. 6 ≥ ½×12 → <strong>Ciężka Rana znika!</strong> Brian znowu leczy się 1 HP / dzień.</div>
+            </div>
+        </div>
+    </div>
+
+    <footer>Call of Cthulhu 7. Edycja • Quick-Start Rules • Diagram po polsku</footer>
+</div>
+</body>
+</html>

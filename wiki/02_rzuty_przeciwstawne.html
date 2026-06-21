@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CoC – Rzuty Przeciwstawne</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background: #0f172a;
+            color: #e2e8f0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+        h1 {
+            text-align: center;
+            font-size: 2rem;
+            color: #34d399;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.4rem;
+        }
+        .subtitle {
+            text-align: center;
+            color: #94a3b8;
+            margin-bottom: 2.5rem;
+            font-size: 0.95rem;
+        }
+        .container { max-width: 900px; margin: 0 auto; }
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #34d399;
+            margin-bottom: 1rem;
+            border-left: 4px solid #34d399;
+            padding-left: 0.7rem;
+        }
+
+        /* VS DIAGRAM */
+        .vs-diagram {
+            display: flex;
+            align-items: stretch;
+            gap: 0;
+            margin-bottom: 2.5rem;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #334155;
+        }
+        .vs-side {
+            flex: 1;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.8rem;
+        }
+        .vs-side.left  { background: #0f2d4a; border-right: 1px solid #334155; }
+        .vs-side.right { background: #2d0f0f; }
+        .vs-center {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 1rem;
+            font-size: 2rem;
+            font-weight: 900;
+            color: #fbbf24;
+            background: #1e293b;
+            border-left: 1px solid #334155;
+            border-right: 1px solid #334155;
+            min-width: 60px;
+        }
+        .actor-label {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #f1f5f9;
+        }
+        .actor-sub {
+            font-size: 0.85rem;
+            color: #94a3b8;
+            text-align: center;
+        }
+        .dice-box {
+            background: #1e293b;
+            border-radius: 8px;
+            padding: 0.5rem 1.2rem;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #fde68a;
+            border: 1px solid #475569;
+        }
+        .roll-result {
+            border-radius: 6px;
+            padding: 0.4rem 1rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-align: center;
+            width: 100%;
+        }
+        .rr-fail    { background:#450a0a; border:2px solid #ef4444; color:#fca5a5; }
+        .rr-regular { background:#1c3526; border:2px solid #34d399; color:#6ee7b7; }
+        .rr-hard    { background:#1e3a5f; border:2px solid #60a5fa; color:#93c5fd; }
+        .rr-extreme { background:#3b1f5e; border:2px solid #c084fc; color:#e9d5ff; }
+
+        /* COMPARISON TABLE */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 2rem;
+            font-size: 0.93rem;
+        }
+        th {
+            background: #0f4c35;
+            color: #34d399;
+            padding: 0.7rem 1rem;
+            text-align: left;
+            font-weight: 700;
+            border-bottom: 2px solid #34d399;
+        }
+        td {
+            padding: 0.65rem 1rem;
+            border-bottom: 1px solid #1e293b;
+            vertical-align: middle;
+        }
+        tr:nth-child(even) td { background: #162032; }
+        tr:nth-child(odd) td  { background: #1e293b; }
+
+        .badge {
+            display: inline-block;
+            border-radius: 5px;
+            padding: 0.2rem 0.6rem;
+            font-weight: 700;
+            font-size: 0.8rem;
+        }
+        .badge-fail    { background:#450a0a; color:#fca5a5; }
+        .badge-regular { background:#1c3526; color:#6ee7b7; }
+        .badge-hard    { background:#1e3a5f; color:#93c5fd; }
+        .badge-extreme { background:#3b1f5e; color:#e9d5ff; }
+        .badge-win     { background:#1e3a5f; color:#bfdbfe; }
+
+        /* SUCCESS LADDER */
+        .ladder {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        .ladder-item {
+            border-radius: 6px;
+            padding: 0.5rem 0.9rem;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-align: center;
+        }
+        .l-fail    { background:#450a0a; border:2px solid #ef4444; color:#fca5a5; }
+        .l-regular { background:#1c3526; border:2px solid #34d399; color:#6ee7b7; }
+        .l-hard    { background:#1e3a5f; border:2px solid #60a5fa; color:#93c5fd; }
+        .l-extreme { background:#3b1f5e; border:2px solid #c084fc; color:#e9d5ff; }
+        .l-arrow   { font-size: 1.2rem; color: #475569; }
+        .ladder-note {
+            text-align: center;
+            color: #94a3b8;
+            font-size: 0.82rem;
+            margin-bottom: 2rem;
+        }
+
+        /* FLOW */
+        .flow { display: flex; flex-direction: column; align-items: center; gap: 0; margin-bottom: 2rem; }
+        .flow-box {
+            background: #1e293b;
+            border: 2px solid #34d399;
+            border-radius: 10px;
+            padding: 0.8rem 2rem;
+            text-align: center;
+            min-width: 280px;
+            max-width: 500px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #f1f5f9;
+        }
+        .flow-box.start { background: #064e3b; }
+        .flow-box.warn  { border-color: #fbbf24; color: #fde68a; }
+        .arrow { font-size: 1.6rem; color: #475569; line-height: 1; padding: 0.15rem 0; }
+
+        .info-box {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-left: 4px solid #fbbf24;
+            border-radius: 8px;
+            padding: 1rem 1.2rem;
+            margin-bottom: 1.5rem;
+            font-size: 0.92rem;
+            line-height: 1.6;
+            color: #cbd5e1;
+        }
+        .info-box strong { color: #fde68a; }
+        footer {
+            text-align: center;
+            color: #475569;
+            font-size: 0.78rem;
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+<style>
+  .wiki-nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 10px 20px;
+    background: rgba(7, 12, 10, 0.96);
+    border-bottom: 1px solid #2a5040;
+    font-family: 'Special Elite', 'Georgia', cursive;
+    font-size: 0.82rem;
+    letter-spacing: 0.05em;
+    backdrop-filter: blur(4px);
+  }
+  .wiki-nav a {
+    color: #5db87a;
+    text-decoration: none;
+    padding: 6px 14px;
+    border-radius: 4px;
+    border: 1px solid transparent;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .wiki-nav a:hover { background: #0a2318; border-color: #2a5040; color: #fff; }
+  .wiki-nav .home-link { color: #c9a96e; font-weight: bold; border-color: #3d5a3a; flex-shrink: 0; }
+  .wiki-nav .nav-label { color: #3d7a52; padding: 0 8px; font-size: 0.75rem; }
+  body { padding-top: 52px !important; }
+  @media print { .wiki-nav { display: none !important; } body { padding-top: 0 !important; } }
+</style>
+<nav class="wiki-nav">
+  <a class="home-link" href="../index.html">&#8962; Biblioteka Graczy</a>
+  <span class="nav-label">Rzuty Przeciwstawne</span>
+  <div></div>
+</nav>
+<div class="container">
+    <h1>⚔️ Rzuty Przeciwstawne</h1>
+    <p class="subtitle">Call of Cthulhu 7. Edycja — System Gry</p>
+
+    <!-- KIEDY -->
+    <p class="section-title">Kiedy stosować?</p>
+    <div class="info-box">
+        Rzut przeciwstawny stosujemy gdy <strong>dwoje postaci rywalizuje ze sobą</strong> — np. badacz vs. badacz lub badacz vs. istotna postać MG (potwór, NPC z podanymi statystykami).
+        Oboje wykonują rzut na tę samą (lub adekwatną) umiejętność i porównują <strong>poziomy sukcesu</strong>.
+    </div>
+
+    <!-- DRABINKA SUKCESU -->
+    <p class="section-title">Drabinka Sukcesów — od najgorszego do najlepszego</p>
+    <div class="ladder">
+        <div class="ladder-item l-fail">❌ Porażka</div>
+        <div class="l-arrow">→</div>
+        <div class="ladder-item l-regular">✅ Sukces Zwykły</div>
+        <div class="l-arrow">→</div>
+        <div class="ladder-item l-hard">✅✅ Sukces Trudny</div>
+        <div class="l-arrow">→</div>
+        <div class="ladder-item l-extreme">✅✅✅ Sukces Ekstremalny</div>
+    </div>
+    <p class="ladder-note">Wyższy poziom sukcesu wygrywa. Wyższy sukces zawsze bije niższy!</p>
+
+    <!-- VS DIAGRAM -->
+    <p class="section-title">Schemat Rzutu Przeciwstawnego</p>
+    <div class="vs-diagram">
+        <div class="vs-side left">
+            <div class="actor-label">👤 Strona A</div>
+            <div class="actor-sub">(np. Badacz)</div>
+            <div class="dice-box">Rzut 1D100</div>
+            <div class="roll-result rr-extreme">Sukces Ekstremalny</div>
+            <div class="roll-result rr-hard">Sukces Trudny</div>
+            <div class="roll-result rr-regular">Sukces Zwykły</div>
+            <div class="roll-result rr-fail">Porażka</div>
+        </div>
+        <div class="vs-center">VS</div>
+        <div class="vs-side right">
+            <div class="actor-label">👁️ Strona B</div>
+            <div class="actor-sub">(np. Potwór / NPC)</div>
+            <div class="dice-box">Rzut 1D100</div>
+            <div class="roll-result rr-extreme">Sukces Ekstremalny</div>
+            <div class="roll-result rr-hard">Sukces Trudny</div>
+            <div class="roll-result rr-regular">Sukces Zwykły</div>
+            <div class="roll-result rr-fail">Porażka</div>
+        </div>
+    </div>
+
+    <!-- COMPARISON TABLE -->
+    <p class="section-title">Kto Wygrywa?</p>
+    <table>
+        <thead>
+            <tr>
+                <th>Strona A osiąga…</th>
+                <th>Strona B osiąga…</th>
+                <th>Wynik</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><span class="badge badge-extreme">Ekstremalny</span></td>
+                <td>Cokolwiek niższego</td>
+                <td>🏆 <strong>Strona A wygrywa</strong></td>
+            </tr>
+            <tr>
+                <td><span class="badge badge-hard">Trudny</span></td>
+                <td><span class="badge badge-regular">Zwykły</span> lub <span class="badge badge-fail">Porażka</span></td>
+                <td>🏆 <strong>Strona A wygrywa</strong></td>
+            </tr>
+            <tr>
+                <td><span class="badge badge-regular">Zwykły</span></td>
+                <td><span class="badge badge-fail">Porażka</span></td>
+                <td>🏆 <strong>Strona A wygrywa</strong></td>
+            </tr>
+            <tr>
+                <td>Ten sam poziom sukcesu</td>
+                <td>Ten sam poziom sukcesu</td>
+                <td>⚖️ Remis → wygrywa strona z <strong>wyższą wartością umiejętności</strong></td>
+            </tr>
+            <tr>
+                <td>Ten sam poziom <strong>i</strong> ta sama wartość</td>
+                <td>Ten sam poziom <strong>i</strong> ta sama wartość</td>
+                <td>🎲 Oboje rzucają 1D100 — <strong>niższy wynik wygrywa</strong></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- BONUS / PENALTY W RZUTACH PRZECIWSTAWNYCH -->
+    <p class="section-title">Kości Bonusowe i Karne w Rzutach Przeciwstawnych</p>
+    <div class="info-box">
+        MG może przyznać <strong>kość bonusową</strong> stronie, która ma przewagę (np. przygotowała się wcześniej, ma sprzyjające okoliczności).<br>
+        Lub nałożyć <strong>kość karną</strong> stronie w niekorzystnej sytuacji (np. jest ranna, zmęczona, pośpiesza się).<br><br>
+        <strong>Kość bonusowa</strong> — rzucasz 2 kości dziesiątek + 1 jedności, bierzesz <em>niższy</em> wynik dziesiątek.<br>
+        <strong>Kość karna</strong> — rzucasz 2 kości dziesiątek + 1 jedności, bierzesz <em>wyższy</em> wynik dziesiątek.<br>
+        Jedna kość bonusowa i jedna karna znoszą się nawzajem.
+    </div>
+
+    <!-- EXAMPLE -->
+    <p class="section-title">Przykład z Gry</p>
+    <div class="info-box">
+        Malcolm (Urok 55%) i Hugh (Urok 55%) rywalizują o względy Lady Greene.<br>
+        Malcolm przez całą sesję obdarowywał ją prezentami — MG przyznaje mu <strong>kość bonusową</strong>.<br><br>
+        Hugh rzuca: wynik <strong>45</strong> → Sukces Zwykły.<br>
+        Malcolm rzuca z kością bonusową: kości dziesiątek: 4 i 2, jedności: 4.<br>
+        Wyniki: <strong>44</strong> lub <strong>24</strong> — bierze niższy → <strong>24</strong> → Sukces Trudny.<br><br>
+        ✅ Malcolm osiąga <em>wyższy poziom sukcesu</em> → <strong>Malcolm wygrywa!</strong>
+    </div>
+
+    <footer>Call of Cthulhu 7. Edycja • Quick-Start Rules • Diagram po polsku</footer>
+</div>
+</body>
+</html>

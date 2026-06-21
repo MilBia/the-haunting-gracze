@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CoC – Walka</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background: #0f172a;
+            color: #e2e8f0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+        h1 {
+            text-align: center;
+            font-size: 2rem;
+            color: #f87171;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.4rem;
+        }
+        .subtitle {
+            text-align: center;
+            color: #94a3b8;
+            margin-bottom: 2.5rem;
+            font-size: 0.95rem;
+        }
+        .container { max-width: 980px; margin: 0 auto; }
+
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #f87171;
+            margin-bottom: 1rem;
+            border-left: 4px solid #f87171;
+            padding-left: 0.7rem;
+        }
+        .section-title.blue  { color: #60a5fa; border-color: #60a5fa; }
+        .section-title.green { color: #34d399; border-color: #34d399; }
+        .section-title.gold  { color: #fbbf24; border-color: #fbbf24; }
+        .section-title.purple{ color: #c084fc; border-color: #c084fc; }
+
+        /* DEX ORDER BAR */
+        .dex-order {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 10px;
+            padding: 1rem 1.5rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        .dex-label { font-size: 0.85rem; color: #94a3b8; margin-right: 0.5rem; white-space: nowrap; }
+        .dex-chip {
+            border-radius: 6px;
+            padding: 0.35rem 0.8rem;
+            font-size: 0.85rem;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+        .dex-high { background: #7f1d1d; border: 2px solid #f87171; color: #fecaca; }
+        .dex-mid  { background: #1e3a5f; border: 2px solid #60a5fa; color: #bfdbfe; }
+        .dex-low  { background: #1c3526; border: 2px solid #34d399; color: #6ee7b7; }
+        .dex-arrow{ color: #475569; font-size: 1.2rem; }
+        .dex-gun  { background: #451a03; border: 2px solid #fbbf24; color: #fde68a; }
+
+        /* FLOW */
+        .flow { display: flex; flex-direction: column; align-items: center; gap: 0; margin-bottom: 2.5rem; }
+        .flow-box {
+            background: #1e293b;
+            border: 2px solid #f87171;
+            border-radius: 10px;
+            padding: 0.8rem 1.8rem;
+            text-align: center;
+            min-width: 300px;
+            max-width: 520px;
+            font-size: 0.93rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            line-height: 1.5;
+        }
+        .flow-box.start  { background: #450a0a; }
+        .flow-box.choice { border-color: #fbbf24; color: #fde68a; background: #1e293b; }
+        .flow-box.blue   { border-color: #60a5fa; }
+        .flow-box.green  { border-color: #34d399; }
+        .flow-box.purple { border-color: #c084fc; }
+        .arrow { font-size: 1.6rem; color: #475569; line-height: 1; padding: 0.15rem 0; }
+
+        .branch-row {
+            display: flex;
+            gap: 1.2rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 0.2rem 0;
+        }
+        .branch-item { display: flex; flex-direction: column; align-items: center; gap: 0; }
+        .branch-label { font-size: 0.78rem; color: #94a3b8; margin-bottom: 0.2rem; text-align: center; max-width: 170px; }
+
+        .result-box {
+            border-radius: 8px;
+            padding: 0.6rem 1.1rem;
+            text-align: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+            min-width: 160px;
+            line-height: 1.4;
+        }
+        .rb-dodge  { background: #1c3526; border: 2px solid #34d399; color: #6ee7b7; }
+        .rb-fight  { background: #1e3a5f; border: 2px solid #60a5fa; color: #93c5fd; }
+        .rb-hit    { background: #450a0a; border: 2px solid #ef4444; color: #fca5a5; }
+        .rb-win    { background: #1c3526; border: 2px solid #34d399; color: #6ee7b7; }
+        .rb-gold   { background: #451a03; border: 2px solid #fbbf24; color: #fde68a; }
+
+        /* TABLES */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 2rem;
+            font-size: 0.92rem;
+        }
+        th {
+            background: #450a0a;
+            color: #f87171;
+            padding: 0.7rem 1rem;
+            text-align: left;
+            font-weight: 700;
+            border-bottom: 2px solid #f87171;
+        }
+        th.blue-head { background: #0f2744; color: #93c5fd; border-color: #60a5fa; }
+        th.green-head{ background: #0a2419; color: #6ee7b7; border-color: #34d399; }
+        th.gold-head { background: #2d1a00; color: #fde68a; border-color: #fbbf24; }
+        th.purple-head{ background: #1e0a3c; color: #e9d5ff; border-color: #c084fc; }
+        td {
+            padding: 0.65rem 1rem;
+            border-bottom: 1px solid #1e293b;
+            vertical-align: middle;
+            line-height: 1.5;
+        }
+        tr:nth-child(even) td { background: #162032; }
+        tr:nth-child(odd)  td { background: #1e293b; }
+
+        .badge {
+            display: inline-block;
+            border-radius: 5px;
+            padding: 0.2rem 0.6rem;
+            font-weight: 700;
+            font-size: 0.78rem;
+        }
+        .b-regular { background: #1c3526; color: #6ee7b7; }
+        .b-hard    { background: #1e3a5f; color: #93c5fd; }
+        .b-extreme { background: #3b1f5e; color: #e9d5ff; }
+        .b-fail    { background: #450a0a; color: #fca5a5; }
+        .b-gold    { background: #451a03; color: #fde68a; }
+
+        /* INFO BOXES */
+        .info-box {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-left: 4px solid #fbbf24;
+            border-radius: 8px;
+            padding: 1rem 1.2rem;
+            margin-bottom: 1.5rem;
+            font-size: 0.92rem;
+            line-height: 1.7;
+            color: #cbd5e1;
+        }
+        .info-box strong { color: #fde68a; }
+
+        .info-box.blue {
+            border-left-color: #60a5fa;
+        }
+        .info-box.blue strong { color: #93c5fd; }
+
+        .info-box.green {
+            border-left-color: #34d399;
+        }
+        .info-box.green strong { color: #6ee7b7; }
+
+        .info-box.purple {
+            border-left-color: #c084fc;
+        }
+        .info-box.purple strong { color: #e9d5ff; }
+
+        .danger-box {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-left: 4px solid #ef4444;
+            border-radius: 8px;
+            padding: 1rem 1.2rem;
+            margin-bottom: 1.5rem;
+            font-size: 0.92rem;
+            line-height: 1.7;
+            color: #cbd5e1;
+        }
+        .danger-box strong { color: #fca5a5; }
+
+        /* WEAPONS GRID */
+        .weapons-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 0.7rem;
+            margin-bottom: 2rem;
+        }
+        .weapon-card {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 0.8rem 1rem;
+        }
+        .weapon-name { font-weight: 700; font-size: 0.92rem; color: #f1f5f9; margin-bottom: 0.3rem; }
+        .weapon-dmg  { font-size: 0.88rem; color: #f87171; font-weight: 700; }
+        .weapon-note { font-size: 0.78rem; color: #64748b; margin-top: 0.3rem; line-height: 1.4; }
+
+        /* MANEUVER GOALS */
+        .maneuver-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 0.7rem;
+            margin-bottom: 2rem;
+        }
+        .maneuver-card {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-left: 3px solid #60a5fa;
+            border-radius: 8px;
+            padding: 0.8rem 1rem;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+        .maneuver-card .mc-title { font-weight: 700; color: #93c5fd; margin-bottom: 0.3rem; }
+        .maneuver-card .mc-desc  { color: #94a3b8; font-size: 0.83rem; }
+
+        /* HP STATES */
+        .hp-states {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+            gap: 0.8rem;
+            margin-bottom: 2rem;
+        }
+        .hp-card {
+            border-radius: 10px;
+            padding: 0.9rem 1.1rem;
+            font-size: 0.88rem;
+            line-height: 1.55;
+        }
+        .hp-ok    { background: #0a2419; border: 2px solid #34d399; }
+        .hp-ok    .hp-label { color: #34d399; font-weight: 800; font-size: 1rem; margin-bottom: 0.35rem; }
+        .hp-major { background: #1e2a00; border: 2px solid #fbbf24; }
+        .hp-major .hp-label { color: #fbbf24; font-weight: 800; font-size: 1rem; margin-bottom: 0.35rem; }
+        .hp-dying { background: #2d0a00; border: 2px solid #ef4444; }
+        .hp-dying .hp-label { color: #ef4444; font-weight: 800; font-size: 1rem; margin-bottom: 0.35rem; }
+        .hp-dead  { background: #1e0a0a; border: 2px solid #7f1d1d; }
+        .hp-dead  .hp-label { color: #9f1239; font-weight: 800; font-size: 1rem; margin-bottom: 0.35rem; }
+        .hp-card p { color: #cbd5e1; }
+
+        /* BRIAN TIMELINE */
+        .timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+        .tl-item {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+            padding: 0.7rem 0;
+        }
+        .tl-dot {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 800;
+            margin-top: 0.1rem;
+        }
+        .tl-line {
+            width: 2px;
+            background: #334155;
+            margin-left: 17px;
+            height: 20px;
+            flex-shrink: 0;
+        }
+        .tl-red    { background: #7f1d1d; color: #fca5a5; border: 2px solid #ef4444; }
+        .tl-yellow { background: #451a03; color: #fde68a; border: 2px solid #fbbf24; }
+        .tl-blue   { background: #0f2744; color: #93c5fd; border: 2px solid #60a5fa; }
+        .tl-green  { background: #0a2419; color: #6ee7b7; border: 2px solid #34d399; }
+        .tl-text { font-size: 0.9rem; line-height: 1.5; color: #cbd5e1; }
+        .tl-text strong { color: #f1f5f9; }
+        .tl-hp { font-weight: 800; font-size: 0.85rem; }
+        .tl-hp.red    { color: #f87171; }
+        .tl-hp.yellow { color: #fbbf24; }
+        .tl-hp.green  { color: #34d399; }
+
+        /* OTHER DAMAGE TABLE */
+        .dmg-row-minor  td { background: #0a2419 !important; }
+        .dmg-row-mod    td { background: #1e2a00 !important; }
+        .dmg-row-severe td { background: #2d0a00 !important; }
+        .dmg-row-deadly td { background: #1e0a0a !important; }
+
+        hr.divider {
+            border: none;
+            border-top: 1px solid #1e293b;
+            margin: 2rem 0;
+        }
+
+        footer {
+            text-align: center;
+            color: #475569;
+            font-size: 0.78rem;
+            margin-top: 2.5rem;
+        }
+    </style>
+</head>
+<body>
+<style>
+  .wiki-nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 10px 20px;
+    background: rgba(7, 12, 10, 0.96);
+    border-bottom: 1px solid #2a5040;
+    font-family: 'Special Elite', 'Georgia', cursive;
+    font-size: 0.82rem;
+    letter-spacing: 0.05em;
+    backdrop-filter: blur(4px);
+  }
+  .wiki-nav a {
+    color: #5db87a;
+    text-decoration: none;
+    padding: 6px 14px;
+    border-radius: 4px;
+    border: 1px solid transparent;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .wiki-nav a:hover { background: #0a2318; border-color: #2a5040; color: #fff; }
+  .wiki-nav .home-link { color: #c9a96e; font-weight: bold; border-color: #3d5a3a; flex-shrink: 0; }
+  .wiki-nav .nav-label { color: #3d7a52; padding: 0 8px; font-size: 0.75rem; }
+  body { padding-top: 52px !important; }
+  @media print { .wiki-nav { display: none !important; } body { padding-top: 0 !important; } }
+</style>
+<nav class="wiki-nav">
+  <a class="home-link" href="../index.html">&#8962; Biblioteka Graczy</a>
+  <span class="nav-label">Walka</span>
+  <div></div>
+</nav>
+<div class="container">
+    <h1>⚔️ Walka</h1>
+    <p class="subtitle">Call of Cthulhu 7. Edycja — System Gry • Strony 12–14</p>
+
+    <div class="danger-box">
+        <strong>Rada Strażnika:</strong> W Zew Cthulhu ucieczka jest mądrzejsza niż walka. Potwory z Mitów często są odporne na kule i zabójczo silne. Walcz tylko gdy nie ma innego wyjścia — przeżycie to sukces.
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════
+         KOLEJNOŚĆ AKCJI
+    ═══════════════════════════════════════════════════ -->
+    <p class="section-title">1. Kolejność Akcji — Inicjatywa (DEX)</p>
+    <div class="dex-order">
+        <span class="dex-label">Kto działa pierwszy?</span>
+        <div class="dex-chip dex-gun">🔫 Gotowa broń palna<br><small>DEX+50</small></div>
+        <div class="dex-arrow">→</div>
+        <div class="dex-chip dex-high">Najwyższy DEX</div>
+        <div class="dex-arrow">→</div>
+        <div class="dex-chip dex-mid">Średni DEX</div>
+        <div class="dex-arrow">→</div>
+        <div class="dex-chip dex-low">Najniższy DEX</div>
+    </div>
+    <div class="info-box">
+        <strong>Czas trwania rundy:</strong> „Tyle ile potrzeba, żeby każdy wykonał jedną znaczącą akcję."<br>
+        <strong>W swojej turze DEX</strong> postać ogłasza akcję: „atakuję potwora", „wyciągam rewolwer", „uciekam!"<br>
+        <strong>Nie można pchnąć (push)</strong> rzutów walki — po prostu atakujesz ponownie w następnej rundzie.
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════
+         WALKA WRĘCZ — FLOW
+    ═══════════════════════════════════════════════════ -->
+    <p class="section-title">2. Przebieg Walki Wręcz</p>
+    <div class="flow">
+        <div class="flow-box start">Atakujący ogłasza atak (swoja kolej w DEX)</div>
+        <div class="arrow">↓</div>
+        <div class="flow-box">Rzut na <strong>Walkę</strong> (Bójka / odpowiednia specjalizacja)</div>
+        <div class="arrow">↓</div>
+        <div class="flow-box choice">Obrońca <strong>wybiera reakcję</strong></div>
+        <div class="arrow">↓</div>
+        <div class="branch-row">
+            <div class="branch-item">
+                <span class="branch-label">Opcja A</span>
+                <div class="result-box rb-dodge">🏃 UNIK<br><small>rzut na Unik</small></div>
+            </div>
+            <div class="branch-item">
+                <span class="branch-label">Opcja B</span>
+                <div class="result-box rb-fight">🛡️ ODPARCIE<br><small>rzut na Walkę</small></div>
+            </div>
+        </div>
+        <div class="arrow">↓</div>
+        <div class="flow-box blue">Porównaj poziomy sukcesu obu stron</div>
+        <div class="arrow">↓</div>
+        <div class="branch-row">
+            <div class="branch-item">
+                <span class="branch-label">Atakujący ma LEPSZY sukces</span>
+                <div class="result-box rb-hit">💥 Trafienie<br>→ atakujący zadaje obrażenia</div>
+            </div>
+            <div class="branch-item">
+                <span class="branch-label">Obrońca RÓWNY lub lepszy</span>
+                <div class="result-box rb-win">✅ Unik/Blok skuteczny<br>→ brak obrażeń</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════
+         RODZAJE TRAFIEŃ
+    ═══════════════════════════════════════════════════ -->
+    <p class="section-title">3. Rodzaje Trafień i Obrażenia</p>
+    <div class="info-box">
+        <strong>Kluczowa reguła:</strong>
+        Postać <strong>inicjująca atak</strong> może osiągnąć obrażenia ekstremalne (Ekstremalny sukces).<br>
+        Postać <strong>odpierająca atak</strong> może zadać <em>co najwyżej</em> <strong>zwykłe obrażenia</strong> (Regular) — nawet przy Hard lub Extreme.
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>Poziom Sukcesu Ataku</th>
+                <th>Broń uderzeniowa (pałka, pięść…)</th>
+                <th>Broń przebijająca (nóż, sztylet…)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><span class="badge b-regular">Zwykły</span></td>
+                <td>Normalny rzut obrażeń + Premia (DB)</td>
+                <td>Normalny rzut obrażeń + Premia (DB)</td>
+            </tr>
+            <tr>
+                <td><span class="badge b-hard">Trudny</span></td>
+                <td>Normalny rzut obrażeń + Premia (DB)</td>
+                <td>Normalny rzut obrażeń + Premia (DB)</td>
+            </tr>
+            <tr>
+                <td><span class="badge b-extreme">Ekstremalny</span> <small style="color:#94a3b8;">(tylko inicjowanie!)</small></td>
+                <td><strong style="color:#e9d5ff;">Maks. obrażenia + DB</strong><br><small>np. 1D6 → 6+DB</small></td>
+                <td><strong style="color:#e9d5ff;">Maks. obrażenia + dodatkowy rzut bronią + DB</strong><br><small>np. nóż 1D4 → 4+1D4+DB</small></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- ═══════════════════════════════════════════════════
+         UNIK vs ODPARCIE
+    ═══════════════════════════════════════════════════ -->
+    <p class="section-title">4. Unik vs. Odparcie — Szczegółowe Porównanie</p>
+    <table>
+        <thead>
+            <tr>
+                <th>Reakcja</th>
+                <th>Umiejętność</th>
+                <th>Warunek sukcesu</th>
+                <th>Maks. obrażenia odwetowe</th>
+                <th>Uwagi</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>🏃 <strong>Unik</strong></td>
+                <td>Unik</td>
+                <td>Rzut Unik ≥ poziomu ataku (lub lepszy)</td>
+                <td>Brak — tylko unikasz</td>
+                <td>Całkowite uniknięcie ciosu</td>
+            </tr>
+            <tr>
+                <td>🛡️ <strong>Odparcie</strong></td>
+                <td>Walka</td>
+                <td>Rzut Walki <em>wyższy</em> niż atakującego</td>
+                <td>Maks. <span class="badge b-regular">Zwykłe</span> obrażenia</td>
+                <td>Blokujesz I kontratakujesz jednocześnie</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- ═══════════════════════════════════════════════════
+         MANEWRY WALKI
+    ═══════════════════════════════════════════════════ -->
+    <p class="section-title blue">5. Manewry Walki (Fighting Maneuvers)</p>
+    <div class="info-box blue">
+        Zamiast zwykłego ataku możesz opisać <strong>inny cel</strong> w walce — np. powalenie, rozbrojenie, unieruchomienie. To jest manewr walki.<br>
+        Mechanicznie działa jak normalny atak <strong>Walką (Bójka)</strong>. Obrońca może się uchylić lub odeprzeć jak zwykle.
+    </div>
+
+    <div class="maneuver-grid">
+        <div class="maneuver-card">
+            <div class="mc-title">✂️ Rozbrojenie</div>
+            <div class="mc-desc">Wyrywasz broń z rąk przeciwnika. Sukces manewru — broń upada na ziemię.</div>
+        </div>
+        <div class="maneuver-card">
+            <div class="mc-title">🦵 Powalenie na ziemię</div>
+            <div class="mc-desc">Przeciwnik traci równowagę i pada. Wymaga kolejnej akcji, by wstać.</div>
+        </div>
+        <div class="maneuver-card">
+            <div class="mc-title">🤼 Unieruchomienie (Chwyt)</div>
+            <div class="mc-desc">Chwytasz i trzymasz przeciwnika. Dopóki go trzymasz, <strong>wszystkie jego akcje z kością karną</strong>. Uwolnienie: udany rzut <strong>STR przeciwstawny</strong>.</div>
+        </div>
+    </div>
+
+    <p class="section-title blue" style="font-size:1rem;">Reguła Budowy (Build) przy manewrach</p>
+    <table>
+        <thead>
+            <tr>
+                <th class="blue-head">Różnica Budowy (Build)</th>
+                <th class="blue-head">Efekt dla inicjującego manewr</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Taka sama lub wyższa Budowa</td>
+                <td>Brak modyfikatorów — normalny rzut</td>
+            </tr>
+            <tr>
+                <td>Inicjujący o 1 punkt niżej</td>
+                <td>1 kość karna do rzutu manewru</td>
+            </tr>
+            <tr>
+                <td>Inicjujący o 2 punkty niżej</td>
+                <td>2 kości karne do rzutu manewru (maksimum)</td>
+            </tr>
+            <tr>
+                <td>Inicjujący o 3+ punkty niżej</td>
+                <td><strong style="color:#fca5a5;">Manewr niemożliwy</strong> — brakuje siły i masy, by osiągnąć efekt</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="info-box blue">
+        <strong>Przykład:</strong> Susan (Build 0) próbuje wypchnąć ghoula (Build 1) przez okno. Różnica 1 punkt → 1 kość karna. Susan rzuca 02 i 22, bierze wyższy wynik (22) — Trudny sukces. Ghoul odpiera rzutem na Walkę: Zwykły sukces. Susan ma lepszy poziom — manewr udany, ghoul leci przez okno.
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════
+         PRZEWAGA LICZEBNA
+    ═══════════════════════════════════════════════════ -->
+    <p class="section-title">6. Przewaga Liczebna (Outnumbered)</p>
+    <div class="info-box">
+        <strong>Zasada:</strong> Gdy postać odpowiedziała już na jeden atak w tej rundzie (uchyliła się lub odparła), <strong>wszystkie kolejne ataki wręcz</strong> na nią w tej samej rundzie są wykonywane z <strong>kością bonusową</strong> przez atakujących.<br>
+        <strong style="color:#94a3b8;">Nie dotyczy ataków bronią palną.</strong>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════
+         BROŃ PALNA
+    ═══════════════════════════════════════════════════ -->
+    <p class="section-title gold">7. Broń Palna — Zasady Specjalne</p>
+
+    <div class="flow" style="margin-bottom: 1.5rem;">
+        <div class="flow-box start">Strzelec ogłasza strzał (swoja kolej DEX)</div>
+        <div class="arrow">↓</div>
+        <div class="flow-box" style="border-color:#fbbf24;">Rzut na <strong>Broń Palną</strong> (odpowiednia specjalizacja)</div>
+        <div class="arrow">↓</div>
+        <div class="flow-box choice">Cel wybiera reakcję</div>
+        <div class="arrow">↓</div>
+        <div class="branch-row">
+            <div class="branch-item">
+                <span class="branch-label">Rzut się za osłonę<br>(Dodge)</span>
+                <div class="result-box rb-dodge">🙈 Rzut na Unik<br><small>→ jeśli sukces: strzelec z kością karną do trafienia</small><br><small>→ cel <strong>traci następną akcję</strong></small></div>
+            </div>
+            <div class="branch-item">
+                <span class="branch-label">Pozostaje i przyjmuje</span>
+                <div class="result-box rb-hit">💥 Normalny strzał<br><small>→ brak modyfikatorów</small></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="danger-box">
+        <strong>Nie można odeprzeć strzału!</strong> Walka (Bójka) nie działa jako obrona przed bronią palną — jedyną opcją jest rzucenie się za osłonę (Unik).
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th class="gold-head">Sytuacja</th>
+                <th class="gold-head">Modyfikator do rzutu</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>🎯 Broń gotowa (bez dobywania)</td>
+                <td>Działa na <strong>DEX+50</strong> — strzela przed wszystkimi innymi</td>
+            </tr>
+            <tr>
+                <td>📍 Bliski zasięg (≤ DEX w stopach)</td>
+                <td><strong>Kość bonusowa</strong> do rzutu na trafienie</td>
+            </tr>
+            <tr>
+                <td>🔫 2–3 strzały z pistoletu w jednej rundzie</td>
+                <td><strong>Kość karna</strong> do każdego strzału</td>
+            </tr>
+            <tr>
+                <td>🙈 Cel rzuca się za osłonę (udany Unik)</td>
+                <td><strong>Kość karna</strong> do rzutu na trafienie dla strzelca</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- ═══════════════════════════════════════════════════
+         OBRAŻENIA BRONI
+    ═══════════════════════════════════════════════════ -->
+    <p class="section-title">8. Tabela Obrażeń Broni</p>
+    <div class="weapons-grid">
+        <div class="weapon-card">
+            <div class="weapon-name">👊 Atak bez broni</div>
+            <div class="weapon-dmg">1D3 + DB</div>
+            <div class="weapon-note">Pięść, kopniak, uderzenie głową</div>
+        </div>
+        <div class="weapon-card">
+            <div class="weapon-name">🔪 Mały nóż</div>
+            <div class="weapon-dmg">1D4 + DB</div>
+            <div class="weapon-note">Broń przebijająca (impaling)</div>
+        </div>
+        <div class="weapon-card">
+            <div class="weapon-name">🔪 Maczeta</div>
+            <div class="weapon-dmg">1D8 + DB</div>
+            <div class="weapon-note">Broń przebijająca (impaling)</div>
+        </div>
+        <div class="weapon-card">
+            <div class="weapon-name">🏏 Mała pałka</div>
+            <div class="weapon-dmg">1D6 + DB</div>
+            <div class="weapon-note">Broń uderzeniowa (blunt)</div>
+        </div>
+        <div class="weapon-card">
+            <div class="weapon-name">⚾ Kij bejsbolowy</div>
+            <div class="weapon-dmg">1D8 + DB</div>
+            <div class="weapon-note">Broń uderzeniowa (blunt)</div>
+        </div>
+        <div class="weapon-card">
+            <div class="weapon-name">🔫 Pistolet</div>
+            <div class="weapon-dmg">1D10</div>
+            <div class="weapon-note">Bez premii za rozmiar (DB)</div>
+        </div>
+        <div class="weapon-card">
+            <div class="weapon-name">💥 Strzelba</div>
+            <div class="weapon-dmg">4D6 (z bliska) / 2D6</div>
+            <div class="weapon-note">Bliski zasięg: ≤ DEX stóp<br>Nie przebija (nie impaling)</div>
+        </div>
+        <div class="weapon-card">
+            <div class="weapon-name">🎯 Karabin</div>
+            <div class="weapon-dmg">2D6+4</div>
+            <div class="weapon-note">Bez premii za rozmiar (DB)</div>
+        </div>
+    </div>
+
+    <div class="info-box">
+        <strong>DB (Damage Bonus / Premia za Rozmiar):</strong> Wartość zależna od STR i SIZ postaci. Broń palna <em>nie</em> korzysta z DB — liczy się tylko siła prochu.
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════
+         INNE FORMY OBRAŻEŃ
+    ═══════════════════════════════════════════════════ -->
+    <p class="section-title purple">9. Inne Formy Obrażeń</p>
+    <div class="info-box purple">
+        Każda wartość dotyczy <strong>jednego incydentu lub jednej rundy</strong> narażenia (jedna runda tonięcia, jeden strzał, jedna runda pożaru itd.).<br>
+        Za każdą kolejną rundę ciągłego narażenia postać otrzymuje kolejną porcję obrażeń.
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th class="purple-head">Stopień</th>
+                <th class="purple-head">Obrażenia</th>
+                <th class="purple-head">Przykłady</th>
+            </tr>
+        </thead>
+        <tbody class="dmg-row-minor">
+            <tr class="dmg-row-minor">
+                <td><span class="badge" style="background:#0a2419;color:#6ee7b7;">Drobne</span><br><small>Można przetrwać wiele takich zdarzeń</small></td>
+                <td><strong style="color:#6ee7b7;">1D3</strong></td>
+                <td>Cios pięścią / kopniak / uderzenie głową / słaby kwas / dym / rzucony kamień / upadek (na 10 stóp) na miękkie podłoże</td>
+            </tr>
+            <tr class="dmg-row-mod">
+                <td><span class="badge" style="background:#1e2a00;color:#fde68a;">Umiarkowane</span><br><small>Może spowodować Poważną Ranę; kilka takich ataków zabija</small></td>
+                <td><strong style="color:#fde68a;">1D6</strong></td>
+                <td>Upadek (na 10 stóp) na trawę / pałka / silny kwas / tonięcie / próżnia / mały kaliber / strzała / ogień (pochodnia)</td>
+            </tr>
+            <tr class="dmg-row-severe">
+                <td><span class="badge" style="background:#2d0a00;color:#fca5a5;">Poważne</span><br><small>Prawdopodobna Poważna Rana; 1–2 takie zdarzenia unieruchamiają lub zabijają</small></td>
+                <td><strong style="color:#fca5a5;">1D10</strong></td>
+                <td>Upadek z dużej wysokości / ciężka broń / intensywny ogień / eksplozja (na krawędzi zasięgu) / przemysłowy kwas</td>
+            </tr>
+            <tr class="dmg-row-deadly">
+                <td><span class="badge" style="background:#1e0a0a;color:#9f1239;">Śmiertelne</span><br><small>Natychmiastowa śmierć lub krytyczne obrażenia</small></td>
+                <td><strong style="color:#9f1239;">2D10+</strong></td>
+                <td>Eksplozja (w centrum) / upadek z bardzo dużej wysokości / apokaliptyczny ogień / broń masowego rażenia</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <footer>Call of Cthulhu 7. Edycja • Quick-Start Rules str. 12–14 • Diagram po polsku</footer>
+</div>
+</body>
+</html>

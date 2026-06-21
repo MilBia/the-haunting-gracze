@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CoC – Poczytalność</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background: #0f172a;
+            color: #e2e8f0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+        h1 {
+            text-align: center;
+            font-size: 2rem;
+            color: #c084fc;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.4rem;
+        }
+        .subtitle {
+            text-align: center;
+            color: #94a3b8;
+            margin-bottom: 2.5rem;
+            font-size: 0.95rem;
+        }
+        .container { max-width: 900px; margin: 0 auto; }
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #c084fc;
+            margin-bottom: 1rem;
+            border-left: 4px solid #c084fc;
+            padding-left: 0.7rem;
+        }
+
+        /* SAN METER */
+        .san-meter-wrap {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .san-meter-label { display: flex; justify-content: space-between; margin-bottom: 0.4rem; font-size: 0.85rem; color: #94a3b8; }
+        .san-bar-outer { background: #0f172a; border-radius: 8px; height: 28px; overflow: hidden; border: 1px solid #334155; }
+        .san-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #7c3aed 0%, #c084fc 60%, #34d399 100%);
+            border-radius: 8px;
+            width: 75%;
+            display: flex;
+            align-items: center;
+            padding-left: 0.8rem;
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: #fff;
+            transition: width 1s;
+        }
+        .san-thresholds {
+            display: flex;
+            gap: 1rem;
+            margin-top: 0.8rem;
+            flex-wrap: wrap;
+        }
+        .threshold-chip {
+            border-radius: 6px;
+            padding: 0.3rem 0.8rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        .tc-normal  { background: #1c3526; border: 1px solid #34d399; color: #6ee7b7; }
+        .tc-trauma  { background: #451a03; border: 1px solid #fbbf24; color: #fde68a; }
+        .tc-insane  { background: #3b0764; border: 1px solid #c084fc; color: #e9d5ff; }
+        .tc-dead    { background: #450a0a; border: 1px solid #ef4444; color: #fca5a5; }
+
+        /* FLOW */
+        .flow { display: flex; flex-direction: column; align-items: center; gap: 0; margin-bottom: 2.5rem; }
+        .flow-box {
+            background: #1e293b;
+            border: 2px solid #c084fc;
+            border-radius: 10px;
+            padding: 0.8rem 1.8rem;
+            text-align: center;
+            min-width: 290px;
+            max-width: 500px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #f1f5f9;
+        }
+        .flow-box.start  { background: #2e1065; }
+        .flow-box.warn   { border-color: #fbbf24; color: #fde68a; background: #1e293b; }
+        .flow-box.danger { border-color: #ef4444; color: #fca5a5; background: #1e293b; }
+        .arrow { font-size: 1.6rem; color: #475569; line-height: 1; padding: 0.15rem 0; }
+        .arrow-label { font-size: 0.78rem; color: #94a3b8; margin: 0; }
+
+        .branch-row {
+            display: flex;
+            gap: 1.2rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 0.2rem 0;
+        }
+        .branch-item { display: flex; flex-direction: column; align-items: center; gap: 0; }
+        .branch-label { font-size: 0.78rem; color: #94a3b8; margin-bottom: 0.2rem; text-align: center; }
+
+        .result-box {
+            border-radius: 8px;
+            padding: 0.6rem 1.1rem;
+            text-align: center;
+            font-weight: 700;
+            font-size: 0.88rem;
+            min-width: 160px;
+        }
+        .result-good { background: #1c3526; border: 2px solid #34d399; color: #6ee7b7; }
+        .result-bad  { background: #450a0a; border: 2px solid #ef4444; color: #fca5a5; }
+        .result-warn { background: #451a03; border: 2px solid #fbbf24; color: #fde68a; }
+        .result-mad  { background: #3b0764; border: 2px solid #c084fc; color: #e9d5ff; }
+
+        /* TABLE */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 2rem;
+            font-size: 0.93rem;
+        }
+        th {
+            background: #2e1065;
+            color: #c084fc;
+            padding: 0.7rem 1rem;
+            text-align: left;
+            font-weight: 700;
+            border-bottom: 2px solid #c084fc;
+        }
+        td {
+            padding: 0.65rem 1rem;
+            border-bottom: 1px solid #1e293b;
+            vertical-align: middle;
+        }
+        tr:nth-child(even) td { background: #162032; }
+        tr:nth-child(odd) td  { background: #1e293b; }
+
+        .info-box {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-left: 4px solid #c084fc;
+            border-radius: 8px;
+            padding: 1rem 1.2rem;
+            margin-bottom: 1.5rem;
+            font-size: 0.92rem;
+            line-height: 1.6;
+            color: #cbd5e1;
+        }
+        .info-box strong { color: #e9d5ff; }
+
+        /* SAN LOSS FORMAT */
+        .san-format-box {
+            background: #1e293b;
+            border: 2px solid #c084fc;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        .san-formula {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: #e9d5ff;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.8rem;
+        }
+        .san-formula .slash { color: #c084fc; }
+        .san-formula .good  { color: #34d399; }
+        .san-formula .bad   { color: #ef4444; }
+        .san-legend {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 0.5rem;
+        }
+        .san-leg-item { font-size: 0.85rem; }
+        .san-leg-good { color: #6ee7b7; }
+        .san-leg-bad  { color: #fca5a5; }
+
+        footer {
+            text-align: center;
+            color: #475569;
+            font-size: 0.78rem;
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+<style>
+  .wiki-nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 10px 20px;
+    background: rgba(7, 12, 10, 0.96);
+    border-bottom: 1px solid #2a5040;
+    font-family: 'Special Elite', 'Georgia', cursive;
+    font-size: 0.82rem;
+    letter-spacing: 0.05em;
+    backdrop-filter: blur(4px);
+  }
+  .wiki-nav a {
+    color: #5db87a;
+    text-decoration: none;
+    padding: 6px 14px;
+    border-radius: 4px;
+    border: 1px solid transparent;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .wiki-nav a:hover { background: #0a2318; border-color: #2a5040; color: #fff; }
+  .wiki-nav .home-link { color: #c9a96e; font-weight: bold; border-color: #3d5a3a; flex-shrink: 0; }
+  .wiki-nav .nav-label { color: #3d7a52; padding: 0 8px; font-size: 0.75rem; }
+  body { padding-top: 52px !important; }
+  @media print { .wiki-nav { display: none !important; } body { padding-top: 0 !important; } }
+</style>
+<nav class="wiki-nav">
+  <a class="home-link" href="../index.html">&#8962; Biblioteka Graczy</a>
+  <span class="nav-label">Poczytalność</span>
+  <div></div>
+</nav>
+<div class="container">
+    <h1>🧠 Poczytalność (SAN)</h1>
+    <p class="subtitle">Call of Cthulhu 7. Edycja — System Gry</p>
+
+    <!-- SAN METER -->
+    <p class="section-title">Pasek Poczytalności</p>
+    <div class="san-meter-wrap">
+        <div class="san-meter-label">
+            <span>0 — Obłęd</span>
+            <span>Aktualna SAN: 75</span>
+            <span>Maksymalna SAN = POW</span>
+        </div>
+        <div class="san-bar-outer">
+            <div class="san-bar-fill">75 / 100</div>
+        </div>
+        <div class="san-thresholds">
+            <span class="threshold-chip tc-normal">SAN &gt; 0 → Normalny</span>
+            <span class="threshold-chip tc-trauma">Strata ≥ 5 jednorazowo → Uraz psychiczny</span>
+            <span class="threshold-chip tc-insane">SAN = 0 → Trwałe szaleństwo</span>
+            <span class="threshold-chip tc-dead">Maksymalna SAN spada przez Mityczne wiedze</span>
+        </div>
+    </div>
+
+    <!-- FORMAT STRATY SAN -->
+    <p class="section-title">Format Straty Poczytalności</p>
+    <div class="san-format-box">
+        <div class="san-formula">
+            <span class="good">0</span>
+            <span class="slash"> / </span>
+            <span class="bad">1D6</span>
+        </div>
+        <div class="san-legend">
+            <span class="san-leg-item san-leg-good">✅ Liczba przed „/" — strata jeśli rzut SAN <strong>zdany</strong> (mniej)</span>
+            <span class="san-leg-item san-leg-bad">❌ Liczba po „/" — strata jeśli rzut SAN <strong>niezdany</strong> (więcej)</span>
+        </div>
+    </div>
+
+    <!-- FLOW SAN ROLL -->
+    <p class="section-title">Jak Działa Rzut na Poczytalność?</p>
+    <div class="flow">
+        <div class="flow-box start">Badacz napotyka horror / coś przerażającego</div>
+        <div class="arrow">↓</div>
+        <div class="flow-box">MG określa utratę SAN w formacie <strong>X / Y</strong><br><em>np. 1/1D6</em></div>
+        <div class="arrow">↓</div>
+        <div class="flow-box">Gracz rzuca <strong>1D100</strong> vs. aktualne SAN</div>
+        <div class="arrow">↓</div>
+        <div class="branch-row">
+            <div class="branch-item">
+                <span class="branch-label">Wynik ≤ SAN (zdany)</span>
+                <div class="result-box result-good">Tracisz mniejszą ilość<br><em>(np. 1 punkt)</em></div>
+            </div>
+            <div class="branch-item">
+                <span class="branch-label">Wynik &gt; SAN (oblany)</span>
+                <div class="result-box result-bad">Tracisz większą ilość<br><em>(np. rzut 1D6)</em></div>
+            </div>
+        </div>
+        <div class="arrow">↓</div>
+        <div class="flow-box warn">Jeśli rzut oblany: MG chwilowo przejmuje kontrolę<br>nad postacią (krzyk, panika, strzał…)</div>
+        <div class="arrow">↓</div>
+        <div class="flow-box">Czy strata ≥ 5 punktów SAN jednorazowo?</div>
+        <div class="arrow">↓</div>
+        <div class="branch-row">
+            <div class="branch-item">
+                <span class="branch-label">NIE</span>
+                <div class="result-box result-good">Badacz zachowuje spokój</div>
+            </div>
+            <div class="branch-item">
+                <span class="branch-label">TAK</span>
+                <div class="result-box result-bad">Poważny uraz emocjonalny!<br>Rzut 1D100 vs. INT</div>
+            </div>
+        </div>
+        <div class="arrow" style="margin-left:80px">↓</div>
+        <div class="branch-row" style="margin-left:0">
+            <div class="branch-item">
+                <span class="branch-label">Rzut INT zdany</span>
+                <div class="result-box result-mad">🌀 Tymczasowe szaleństwo<br>(1D10 godzin)</div>
+            </div>
+            <div class="branch-item">
+                <span class="branch-label">Rzut INT oblany</span>
+                <div class="result-box result-good">Umysł blokuje horror<br>(Badacz zostaje poczytalny)</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SZALEŃSTWO -->
+    <p class="section-title">Tymczasowe Szaleństwo</p>
+    <table>
+        <thead>
+            <tr>
+                <th>Co się dzieje?</th>
+                <th>Opis</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>⏱️ Czas trwania</td>
+                <td>1D10 godzin — potem badacz wraca do zdrowia</td>
+            </tr>
+            <tr>
+                <td>🎲 Forma szaleństwa</td>
+                <td>Rzut 1D10 i konsultacja Tabeli Napadów Szaleństwa</td>
+            </tr>
+            <tr>
+                <td>😰 Fobie i manie</td>
+                <td>MG może dodać fobię lub manię do karty postaci (np. „strach przed ciemnością")</td>
+            </tr>
+            <tr>
+                <td>✏️ Zmieniona historia</td>
+                <td>MG może przekształcić jeden wpis w Historii badacza (np. „Ufający" → „Lękliwy")</td>
+            </tr>
+            <tr>
+                <td>👻 Złudzenia</td>
+                <td>MG może serwować halucynacje. Badacz może zażądać „testu rzeczywistości" (rzut SAN)</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- ODZYSKIWANIE SAN -->
+    <p class="section-title">Odzyskiwanie Poczytalności</p>
+    <div class="info-box">
+        Odbudowa SAN to <strong>powolny, trudny proces</strong> — strata zwykle przewyższa zyski.<br><br>
+        <strong>Jak odzyskać SAN:</strong><br>
+        • Hospitalizacja i odpoczynek od przygód → małe przyrosty SAN<br>
+        • Psychoterapia → stopniowe leczenie<br>
+        • Pomyślne zakończenie śledztwa → nagroda SAN od MG<br><br>
+        Im niższe SAN, tym trudniej radzić sobie z nowymi horrorami. Poczytalność ma tendencję do spirali w dół.
+    </div>
+
+    <footer>Call of Cthulhu 7. Edycja • Quick-Start Rules • Diagram po polsku</footer>
+</div>
+</body>
+</html>

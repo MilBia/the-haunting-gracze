@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CoC – Rzuty na Szczęście</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background: #0f172a;
+            color: #e2e8f0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+        h1 {
+            text-align: center;
+            font-size: 2rem;
+            color: #fbbf24;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.4rem;
+        }
+        .subtitle {
+            text-align: center;
+            color: #94a3b8;
+            margin-bottom: 2.5rem;
+            font-size: 0.95rem;
+        }
+        .container { max-width: 860px; margin: 0 auto; }
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #fbbf24;
+            margin-bottom: 1rem;
+            border-left: 4px solid #fbbf24;
+            padding-left: 0.7rem;
+        }
+
+        /* FLOW */
+        .flow { display: flex; flex-direction: column; align-items: center; gap: 0; margin-bottom: 2.5rem; }
+        .flow-box {
+            background: #1e293b;
+            border: 2px solid #fbbf24;
+            border-radius: 10px;
+            padding: 0.85rem 2rem;
+            text-align: center;
+            min-width: 280px;
+            max-width: 440px;
+            font-size: 0.98rem;
+            font-weight: 600;
+            color: #f1f5f9;
+        }
+        .flow-box.start { background: #451a03; border-color: #fbbf24; }
+        .arrow { font-size: 1.6rem; color: #475569; line-height: 1; padding: 0.15rem 0; }
+
+        .branch-row {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 0.2rem 0;
+        }
+        .branch-item { display: flex; flex-direction: column; align-items: center; gap: 0; }
+        .branch-label { font-size: 0.8rem; color: #94a3b8; margin-bottom: 0.2rem; text-align: center; }
+
+        .result-box {
+            border-radius: 8px;
+            padding: 0.7rem 1.3rem;
+            text-align: center;
+            font-weight: 700;
+            font-size: 1rem;
+            min-width: 150px;
+        }
+        .result-success { background: #1c3526; border: 2px solid #34d399; color: #6ee7b7; }
+        .result-fail    { background: #450a0a; border: 2px solid #ef4444; color: #fca5a5; }
+
+        /* LUCK GAUGE */
+        .luck-card {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+        .luck-circle {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: conic-gradient(#fbbf24 0% 65%, #334155 65% 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            position: relative;
+        }
+        .luck-circle-inner {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            background: #1e293b;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .luck-val { font-size: 1.4rem; font-weight: 900; color: #fde68a; }
+        .luck-lbl { font-size: 0.6rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em; }
+        .luck-text { flex: 1; }
+        .luck-text h3 { font-size: 1.1rem; color: #fde68a; margin-bottom: 0.5rem; }
+        .luck-text p  { font-size: 0.92rem; color: #cbd5e1; line-height: 1.6; }
+
+        /* COMPARISON TABLE */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 2rem;
+            font-size: 0.93rem;
+        }
+        th {
+            background: #451a03;
+            color: #fde68a;
+            padding: 0.7rem 1rem;
+            text-align: left;
+            font-weight: 700;
+            border-bottom: 2px solid #fbbf24;
+        }
+        td {
+            padding: 0.65rem 1rem;
+            border-bottom: 1px solid #1e293b;
+            vertical-align: middle;
+        }
+        tr:nth-child(even) td { background: #162032; }
+        tr:nth-child(odd) td  { background: #1e293b; }
+
+        .info-box {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-left: 4px solid #fbbf24;
+            border-radius: 8px;
+            padding: 1rem 1.2rem;
+            margin-bottom: 1.5rem;
+            font-size: 0.92rem;
+            line-height: 1.6;
+            color: #cbd5e1;
+        }
+        .info-box strong { color: #fde68a; }
+        .tip-box {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-left: 4px solid #34d399;
+            border-radius: 8px;
+            padding: 1rem 1.2rem;
+            margin-bottom: 1.5rem;
+            font-size: 0.92rem;
+            line-height: 1.6;
+            color: #cbd5e1;
+        }
+        .tip-box strong { color: #6ee7b7; }
+
+        footer {
+            text-align: center;
+            color: #475569;
+            font-size: 0.78rem;
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+<style>
+  .wiki-nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 10px 20px;
+    background: rgba(7, 12, 10, 0.96);
+    border-bottom: 1px solid #2a5040;
+    font-family: 'Special Elite', 'Georgia', cursive;
+    font-size: 0.82rem;
+    letter-spacing: 0.05em;
+    backdrop-filter: blur(4px);
+  }
+  .wiki-nav a {
+    color: #5db87a;
+    text-decoration: none;
+    padding: 6px 14px;
+    border-radius: 4px;
+    border: 1px solid transparent;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .wiki-nav a:hover { background: #0a2318; border-color: #2a5040; color: #fff; }
+  .wiki-nav .home-link { color: #c9a96e; font-weight: bold; border-color: #3d5a3a; flex-shrink: 0; }
+  .wiki-nav .nav-label { color: #3d7a52; padding: 0 8px; font-size: 0.75rem; }
+  body { padding-top: 52px !important; }
+  @media print { .wiki-nav { display: none !important; } body { padding-top: 0 !important; } }
+</style>
+<nav class="wiki-nav">
+  <a class="home-link" href="../index.html">&#8962; Biblioteka Graczy</a>
+  <span class="nav-label">Rzuty na Szczęście</span>
+  <div></div>
+</nav>
+<div class="container">
+    <h1>🍀 Rzuty na Szczęście</h1>
+    <p class="subtitle">Call of Cthulhu 7. Edycja — System Gry</p>
+
+    <!-- CZYM JEST SZCZĘŚCIE -->
+    <p class="section-title">Czym jest Szczęście?</p>
+    <div class="luck-card">
+        <div class="luck-circle">
+            <div class="luck-circle-inner">
+                <span class="luck-val">65</span>
+                <span class="luck-lbl">SZCZĘŚCIE</span>
+            </div>
+        </div>
+        <div class="luck-text">
+            <h3>Wartość Szczęścia (Luck)</h3>
+            <p>Każdy badacz posiada wartość Szczęścia — liczbę od 1 do 100.<br>
+            Rzut na Szczęście określa, czy <strong>zewnętrzne okoliczności</strong> są po stronie badacza.<br>
+            Szczęście <em>maleje</em> gdy jest wydawane i może się zmieniać podczas gry.</p>
+        </div>
+    </div>
+
+    <!-- FLOW DIAGRAM -->
+    <p class="section-title">Jak Wykonać Rzut na Szczęście?</p>
+    <div class="flow">
+        <div class="flow-box start">MG decyduje, że potrzebny jest Rzut na Szczęście</div>
+        <div class="arrow">↓</div>
+        <div class="flow-box">Gracz z <strong>najniższą wartością Szczęścia</strong> rzuca za grupę<br><em>(lub dany badacz rzuca za siebie)</em></div>
+        <div class="arrow">↓</div>
+        <div class="flow-box">Rzut <strong>1D100</strong></div>
+        <div class="arrow">↓</div>
+        <div class="branch-row">
+            <div class="branch-item">
+                <span class="branch-label">Wynik ≤ wartości Szczęścia</span>
+                <div class="result-box result-success">✅ Szczęście sprzyja</div>
+            </div>
+            <div class="branch-item">
+                <span class="branch-label">Wynik &gt; wartości Szczęścia</span>
+                <div class="result-box result-fail">❌ Pech</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- KIEDY UŻYWAĆ -->
+    <p class="section-title">Kiedy Używać Rzutu na Szczęście?</p>
+    <table>
+        <thead>
+            <tr>
+                <th>Sytuacja</th>
+                <th>Rzut</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Czy w ciemnej stodole jest latarnia?</td>
+                <td>🍀 Rzut na Szczęście</td>
+            </tr>
+            <tr>
+                <td>Czy znaleziona latarka ma jeszcze baterie?</td>
+                <td>🍀 Rzut na Szczęście</td>
+            </tr>
+            <tr>
+                <td>Czy taksówka przyjedzie o 2 w nocy w złej dzielnicy?</td>
+                <td>🍀 Rzut na Szczęście</td>
+            </tr>
+            <tr>
+                <td>Czy strażnik akurat patrzy w inną stronę?</td>
+                <td>🍀 Rzut na Szczęście</td>
+            </tr>
+            <tr>
+                <td>Czy badacz zna tę osobę?</td>
+                <td>❌ Nie — użyj odpowiedniej umiejętności (np. Znajomości)</td>
+            </tr>
+            <tr>
+                <td>Czy badacz dostaje się przez okno bez hałasu?</td>
+                <td>❌ Nie — użyj umiejętności (np. Zwinności lub Skradania)</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- WSKAZÓWKA -->
+    <div class="tip-box">
+        <strong>Zasada priorytetu:</strong> Jeśli pasuje tu jakaś konkretna umiejętność lub cecha — użyj jej zamiast Szczęścia.<br>
+        Szczęście jest dla sytuacji, gdzie <em>żadna umiejętność nie ma wpływu</em> — czysta sprawa przypadku i losu.
+    </div>
+
+    <!-- GRUPOWY RZUT NA SZCZĘŚCIE -->
+    <p class="section-title">Grupowy Rzut na Szczęście</p>
+    <div class="info-box">
+        Gdy MG zarządzi <strong>grupowy rzut na Szczęście</strong>, rzut wykonuje badacz z <strong>najniższą wartością Szczęścia</strong> spośród obecnych w scenie.<br><br>
+        Wynik dotyczy całej grupy — losy wszystkich zależą od tej jednej osoby.<br>
+        <strong>Przykład:</strong> Czy cała ekipa zdąży wsiąść do odjeżdżającego tramwaju?
+    </div>
+
+    <!-- PRZYKŁAD -->
+    <p class="section-title">Przykład z Gry</p>
+    <div class="info-box">
+        Badacze ścigają samochód o 2 w nocy. Chcą złapać taksówkę w podejrzanej dzielnicy.<br>
+        Żadna umiejętność nie wywoła taksówki z powietrza — <strong>to kwestia trafu</strong>.<br>
+        MG zarządza Rzut na Szczęście dla badacza z najniższym Szczęściem (wartość: 45).<br>
+        Gracz rzuca 1D100 → wynik <strong>38</strong> → 38 ≤ 45 → <strong>Taksówka się pojawia!</strong>
+    </div>
+
+    <footer>Call of Cthulhu 7. Edycja • Quick-Start Rules • Diagram po polsku</footer>
+</div>
+</body>
+</html>
