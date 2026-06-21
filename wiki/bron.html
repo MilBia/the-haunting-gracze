@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arsenał Badaczy – The Haunting</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Special+Elite&family=Marck+Script&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background-color: #0e1318;
+            background-image:
+                radial-gradient(ellipse at 20% 20%, rgba(60, 30, 10, 0.18) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 80%, rgba(30, 20, 50, 0.2) 0%, transparent 60%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 50px 20px 80px;
+            font-family: 'Georgia', serif;
+            min-height: 100vh;
+        }
+
+        .print-btn {
+            position: fixed;
+            top: 72px;
+            right: 20px;
+            padding: 12px 20px;
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 14px;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+        .print-btn:hover { background-color: #1a252f; transform: translateY(-2px); }
+
+        .document {
+            background-color: #f0e8d2;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)' opacity='0.06'/%3E%3C/svg%3E");
+            color: #1a150e;
+            width: 100%;
+            max-width: 860px;
+            padding: 70px 65px;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.75), inset 0 0 80px rgba(100,70,20,0.15);
+            border: 1px solid #d4c9a8;
+            position: relative;
+        }
+
+        .document::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 55px; bottom: 0;
+            border-left: 1px solid rgba(160,100,40,0.2);
+        }
+
+        .age-stain { position: absolute; border-radius: 50%; pointer-events: none; }
+        .stain-1 { top: 40px; right: 60px; width: 80px; height: 60px; background: radial-gradient(ellipse, rgba(139,90,20,0.12) 0%, transparent 70%); }
+        .stain-2 { bottom: 80px; left: 40px; width: 100px; height: 70px; background: radial-gradient(ellipse, rgba(100,70,20,0.1) 0%, transparent 70%); }
+
+        /* Nagłówek */
+        .doc-header {
+            text-align: center;
+            border-bottom: 3px double #3a2e1e;
+            padding-bottom: 22px;
+            margin-bottom: 40px;
+        }
+        .doc-eyebrow {
+            font-family: 'Special Elite', monospace;
+            font-size: 0.72rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: #6b5030;
+            margin-bottom: 12px;
+        }
+        .doc-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.1rem;
+            font-weight: 900;
+            color: #1a120a;
+            line-height: 1.2;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+        .doc-subtitle {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 1rem;
+            color: #5a4020;
+        }
+        .doc-meta {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 14px;
+            font-family: 'Special Elite', monospace;
+            font-size: 0.68rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #7a6040;
+        }
+
+        /* Sekcje */
+        .section-header {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.25rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #1a120a;
+            border-bottom: 1px solid rgba(58,46,30,0.35);
+            padding-bottom: 6px;
+            margin: 40px 0 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .section-header::before { content: '✦'; font-size: 0.8rem; color: #8b6030; }
+
+        /* Tabela */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 10px;
+            font-size: 0.88rem;
+        }
+        thead tr {
+            background-color: rgba(58,46,30,0.12);
+        }
+        th {
+            font-family: 'Special Elite', monospace;
+            font-size: 0.65rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #6b5030;
+            padding: 8px 10px;
+            text-align: left;
+            border-bottom: 2px solid rgba(58,46,30,0.3);
+        }
+        td {
+            padding: 8px 10px;
+            border-bottom: 1px solid rgba(58,46,30,0.15);
+            color: #1e1810;
+            vertical-align: top;
+        }
+        tr:last-child td { border-bottom: none; }
+        tr:hover td { background-color: rgba(139,96,48,0.06); }
+
+        .weapon-name {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            color: #1a120a;
+        }
+        .skill-tag {
+            font-family: 'Special Elite', monospace;
+            font-size: 0.78rem;
+            color: #5a4020;
+        }
+        .damage {
+            font-family: 'Special Elite', monospace;
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: #6b1a0a;
+        }
+        .owner-tag {
+            display: inline-block;
+            font-family: 'Special Elite', monospace;
+            font-size: 0.6rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: #7a6040;
+            background: rgba(139,96,48,0.12);
+            border: 1px solid rgba(139,96,48,0.25);
+            border-radius: 2px;
+            padding: 1px 5px;
+            margin: 1px 2px 1px 0;
+            white-space: nowrap;
+        }
+
+        /* Karta postaci – podsumowanie */
+        .character-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 10px;
+        }
+        .character-card {
+            border: 1px solid rgba(58,46,30,0.3);
+            padding: 14px 16px;
+            background: rgba(200,180,130,0.12);
+        }
+        .char-name {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: #1a120a;
+            margin-bottom: 6px;
+        }
+        .char-items {
+            font-size: 0.83rem;
+            color: #2a1e10;
+            line-height: 1.7;
+        }
+        .char-items span {
+            display: block;
+            padding-left: 12px;
+            position: relative;
+        }
+        .char-items span::before {
+            content: '–';
+            position: absolute;
+            left: 0;
+            color: #8b6030;
+        }
+
+        /* Uwagi */
+        .note {
+            font-family: 'Marck Script', cursive;
+            font-size: 1rem;
+            color: #3a4a5a;
+            line-height: 1.6;
+            border-left: 2px solid rgba(58,74,90,0.4);
+            padding-left: 15px;
+            margin: 24px 0;
+        }
+
+        p {
+            font-size: 0.9rem;
+            line-height: 1.7;
+            color: #1e1810;
+            margin-bottom: 10px;
+        }
+
+        .ornament {
+            text-align: center;
+            color: #8b6030;
+            font-size: 1.2rem;
+            letter-spacing: 12px;
+            margin: 30px 0;
+            opacity: 0.7;
+        }
+
+        .doc-footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 2px double #3a2e1e;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+        .footer-left {
+            font-family: 'Special Elite', monospace;
+            font-size: 0.65rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #7a6040;
+            line-height: 1.8;
+        }
+        .footer-sig { font-family: 'Marck Script', cursive; font-size: 1.4rem; color: #1c2d1a; text-align: right; }
+        .footer-sig-sub { font-family: 'Georgia', serif; font-size: 0.72rem; font-style: italic; color: #666; text-align: right; margin-top: 2px; }
+
+        @media print {
+            body { background: white; padding: 0; }
+            .print-btn, .wiki-nav { display: none !important; }
+            .document { box-shadow: none; border: none; max-width: 100%; background: white; }
+            .document::before { display: none; }
+            body { padding-top: 0 !important; }
+        }
+    </style>
+</head>
+
+<body>
+
+<style>
+  .wiki-nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 10px 20px;
+    background: rgba(7, 12, 10, 0.96);
+    border-bottom: 1px solid #2a5040;
+    font-family: 'Special Elite', 'Georgia', cursive;
+    font-size: 0.82rem;
+    letter-spacing: 0.05em;
+    backdrop-filter: blur(4px);
+  }
+  .wiki-nav a {
+    color: #5db87a;
+    text-decoration: none;
+    padding: 6px 14px;
+    border-radius: 4px;
+    border: 1px solid transparent;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .wiki-nav a:hover { background: #0a2318; border-color: #2a5040; color: #fff; }
+  .wiki-nav .home-link { color: #c9a96e; font-weight: bold; border-color: #3d5a3a; flex-shrink: 0; }
+  .wiki-nav .nav-label { color: #3d7a52; padding: 0 8px; font-size: 0.75rem; }
+  body { padding-top: 52px !important; }
+  @media print { .wiki-nav { display: none !important; } body { padding-top: 0 !important; } }
+</style>
+<nav class="wiki-nav">
+  <a class="home-link" href="../index.html">&#8962; Biblioteka Graczy</a>
+  <span class="nav-label">Arsenał Badaczy</span>
+  <div></div>
+</nav>
+
+<button class="print-btn" onclick="window.print()">🖨️ Drukuj</button>
+
+<div class="document">
+    <div class="age-stain stain-1"></div>
+    <div class="age-stain stain-2"></div>
+
+    <!-- NAGŁÓWEK -->
+    <div class="doc-header">
+        <div class="doc-eyebrow">Dokumentacja Operacyjna · Boston 1920</div>
+        <div class="doc-title">Arsenał Badaczy</div>
+        <div class="doc-subtitle">Wykaz broni i ekwipunku bojowego drużyny</div>
+        <div class="doc-meta">
+            <span>Listopad 1920 r.</span>
+            <span>Materiał zastrzeżony</span>
+            <span>Boston, Massachusetts</span>
+        </div>
+    </div>
+
+    <!-- STAN EKWIPUNKU -->
+    <div class="section-header">Stan ekwipunku — przegląd</div>
+    <div class="character-grid">
+        <div class="character-card">
+            <div class="char-name">Falka Markowska</div>
+            <div class="char-items">
+                <span>2 lampy naftowe</span>
+                <span>Łom</span>
+                <span>Zapałki</span>
+            </div>
+        </div>
+        <div class="character-card">
+            <div class="char-name">Clara Loft</div>
+            <div class="char-items">
+                <span>Rewolwer .38</span>
+                <span>Liny</span>
+            </div>
+        </div>
+        <div class="character-card">
+            <div class="char-name">Joseph „Joe" Miller</div>
+            <div class="char-items">
+                <span>Rewolwer .45</span>
+                <span>Średni nóż</span>
+            </div>
+        </div>
+        <div class="character-card">
+            <div class="char-name">Henrietta Ząbek</div>
+            <div class="char-items">
+                <span>5 małych noży</span>
+                <span>Pas z nożami (krępuje ruchy)</span>
+            </div>
+        </div>
+        <div class="character-card">
+            <div class="char-name">Andrzej Bigos</div>
+            <div class="char-items">
+                <span>Pistolet .22 Short Automatic</span>
+                <span>Średni nóż</span>
+                <span>Zapalniczka</span>
+                <span>Liny</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="ornament">— ✦ —</div>
+
+    <!-- BROŃ PALNA -->
+    <div class="section-header">Broń palna</div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Broń</th>
+                <th>Umiejętność</th>
+                <th>Obrażenia</th>
+                <th>Zasięg</th>
+                <th>Strz./rundę</th>
+                <th>Naboje</th>
+                <th>Awaria</th>
+                <th>Właściciel</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><span class="weapon-name">Rewolwer .38</span></td>
+                <td><span class="skill-tag">Broń palna (pistolet)</span></td>
+                <td><span class="damage">1d10</span></td>
+                <td>15 m</td>
+                <td>1 (3)</td>
+                <td>6</td>
+                <td>100</td>
+                <td><span class="owner-tag">Clara</span></td>
+            </tr>
+            <tr>
+                <td><span class="weapon-name">Rewolwer .45</span></td>
+                <td><span class="skill-tag">Broń palna (pistolet)</span></td>
+                <td><span class="damage">1d10+2</span></td>
+                <td>15 m</td>
+                <td>1 (3)</td>
+                <td>6</td>
+                <td>100</td>
+                <td><span class="owner-tag">Joe</span></td>
+            </tr>
+            <tr>
+                <td><span class="weapon-name">Pistolet .22 Short Automatic</span></td>
+                <td><span class="skill-tag">Broń palna (pistolet)</span></td>
+                <td><span class="damage">1d6</span></td>
+                <td>10 m</td>
+                <td>1 (3)</td>
+                <td>6</td>
+                <td>100</td>
+                <td><span class="owner-tag">Bigos</span></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="ornament">— ✦ —</div>
+
+    <!-- BROŃ BIAŁA -->
+    <div class="section-header">Broń biała</div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Broń</th>
+                <th>Umiejętność</th>
+                <th>Obrażenia</th>
+                <th>Zasięg</th>
+                <th>Strz./rundę</th>
+                <th>Właściciel</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><span class="weapon-name">Średni nóż</span></td>
+                <td><span class="skill-tag">Walka wręcz (bijatyka)</span></td>
+                <td><span class="damage">1d4+2+DB</span></td>
+                <td>dotyk</td>
+                <td>1</td>
+                <td><span class="owner-tag">Joe</span><span class="owner-tag">Bigos</span></td>
+            </tr>
+            <tr>
+                <td><span class="weapon-name">Mały nóż ×5</span></td>
+                <td><span class="skill-tag">Walka wręcz (bijatyka) / Rzut</span></td>
+                <td><span class="damage">1d4+DB</span></td>
+                <td>dotyk / 5 m</td>
+                <td>1</td>
+                <td><span class="owner-tag">Henrietta</span></td>
+            </tr>
+            <tr>
+                <td><span class="weapon-name">Łom</span></td>
+                <td><span class="skill-tag">Walka wręcz (bijatyka)</span></td>
+                <td><span class="damage">1d8+DB</span></td>
+                <td>dotyk</td>
+                <td>1</td>
+                <td><span class="owner-tag">Falka</span></td>
+            </tr>
+        </tbody>
+    </table>
+
+
+    <!-- STOPKA -->
+    <div class="doc-footer">
+        <div class="footer-left">
+            Arsenał Badaczy · Boston, Massachusetts<br>
+            Listopad, Roku Pańskiego 1920<br>
+            Materiał przeznaczony dla Strażnika Tajemnic
+        </div>
+        <div>
+            <div class="footer-sig">Strażnik Tajemnic</div>
+            <div class="footer-sig-sub">Kronikarz zdarzeń</div>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
